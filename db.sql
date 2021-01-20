@@ -25,11 +25,11 @@ CREATE TABLE books (
 	book_information TEXT NOT NULL,
 	book_picture VARCHAR(100) NOT NULL,
 	class_id BIGINT NOT NULL,
-	hot INT NOT NULL,
+	click_sum INT NOT NULL,
 	PRIMARY KEY (book_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE chooses (
+CREATE TABLE users_books (
 	id BIGINT NOT NULL AUTO_INCREMENT,
 	user_id BIGINT NOT NULL,
 	book_id BIGINT NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE book_class (
 	class_id BIGINT NOT NULL AUTO_INCREMENT,
 	class_name VARCHAR(100) NOT NULL,
 	class_picture TEXT NOT NULL,
-	book_number BIGINT NOT NULL,
+	book_sum BIGINT NOT NULL,
 	PRIMARY KEY (class_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
