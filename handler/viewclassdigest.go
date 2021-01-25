@@ -1,0 +1,9 @@
+package handler
+
+import(
+	"github.com/gin-gonic/gin"
+)
+
+func ViewClassDigest(c *gin.Context){
+
+}
