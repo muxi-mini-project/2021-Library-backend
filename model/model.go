@@ -2,31 +2,31 @@ package model
 
 import (
 	"log"
-	"strconv"
 )
 
 type Userinfo struct {
-	Id          string `json:"user_id"`
-	UserName    string `json:"user_name"`
-	Password    string `json:"password"`
-	Userpicture string `json:"user_picture"`
+	UserId       string `json:"user_id"`
+	UserName     string `json:"user_name"`
+	UserPassword string `json:"user_password"`
+	UserPicture  string `json:"user_picture"`
 	//	motto       string `json:"user_motto"`
 }
 
 func Register(name string, password string) string {
-	count := 0
-	if err := DB.Table("user").Count(&count).Error; err != nil {
-		log.Println("registerError" + err.Error())
-		return ""
-	}
-	temp := 0 + count
-	id := strconv.Itoa(temp)
-	user := Userinfo{Id: id, UserName: name, Password: password}
-	if err := DB.Table("user").Create(&user).Error; err != nil {
+	//count := 0
+	//if err := DB.Table("users").Count(&count).Error; err != nil {
+	//	log.Println("registerError" + err.Error())
+	//	return ""
+	//}
+	//temp := 0 + count
+	//id := strconv.Itoa(temp)
+	user := Userinfo{UserName: name, UserPassword: password}
+	if err := DB.Table("users").Create(&user).Error; err != nil {
 		log.Println("registError" + err.Error())
 		return ""
 	}
-	return id
+	DB.Table("users").Create(&user)
+	return name
 }
 
 //验证用户是否存在
@@ -49,10 +49,10 @@ func TestPassword(id string, password string) bool {
 		log.Println("Error" + err.Error())
 		return false
 	}
-	if user.Password == password {
+	if user.UserPassword == password {
 		return true
 	}
-	log.Println(user.Password)
+	log.Println(user.UserPassword)
 	log.Println(password)
 	return false
 }

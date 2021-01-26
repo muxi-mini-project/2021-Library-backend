@@ -6,11 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Router() {
-	router := gin.Default()
+func Router(r *gin.Engine) {
 
-	router.POST("/api/v1/user", handler.User)
-	router.POST("/api/v1/login", handler.Login)
+	r.POST("/user", handler.User)
+	r.POST("/login", handler.Login)
 
 	//Group1 := router("/api/v1/Homepage") {
 	//	Group1.GET("/", handler.Homepage)                             //用户主页
