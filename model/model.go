@@ -6,11 +6,11 @@ import (
 )
 
 type Userinfo struct {
-	Id          string
-	UserName    string
-	Password    string
-	Userpicture string
-	motto       string
+	Id          string `json:"user_id"`
+	UserName    string `json:"user_name"`
+	Password    string `json:"password"`
+	Userpicture string `json:"user_picture"`
+	//	motto       string `json:"user_motto"`
 }
 
 func Register(name string, password string) string {
