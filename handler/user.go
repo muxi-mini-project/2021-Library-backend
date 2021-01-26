@@ -1,28 +1,28 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
 	"2021-Library-backend/model"
+
+	"github.com/gin-gonic/gin"
 )
 
 func User(c *gin.Context) {
 	var user model.Userinfo
 	if err := c.BindJSON(&user); err != nil {
-		c.JSON(400,gin.H{
-			"message": "输入有误，格式错误"
-		})
+		c.JSON(400, gin.H{
+			"message": "输入有误，格式错误"})
 		return
 	}
-	user_id := model.Register(user.UserName, user.Password)	
+	user_id := model.Register(user.UserName, user.Password)
 	c.JSON(200, gin.H{
-		"user_id" : user_id,
+		"user_id": user_id,
 	})
 }
 
 func Login(c *gin.Context) {
-	var usre model.userinfo
+	var user model.Userinfo
 	if err := c.BindJSON(&user); err != nil {
-		c.JSON(400,gin.H{"message": "输入格式错误"})
+		c.JSON(400, gin.H{"message": "输入格式错误"})
 		return
 	}
 	// 验证用户名是否存在
