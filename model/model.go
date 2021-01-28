@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"time"
@@ -22,7 +23,7 @@ func Register(name string, password string) string {
 		return ""
 	}
 	//DB.Table("users").Create(&user)
-	return name
+	return user.UserId
 }
 
 //验证用户是否存在
@@ -104,4 +105,51 @@ func genToken(claims jwtClaims) (string, error) {
 		return "", err
 	}
 	return signedToken, nil
+}
+
+var Secret = "sault" //加盐
+//验证token
+func VerifyToken(token string) (*jwtClaims, error) {
+	TempToken, err := jwt.ParseWithClaims(token, &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(Secret), nil
+	})
+	if err != nil {
+		return nil, errors.New("token解析失败")
+	}
+	claims, ok := TempToken.Claims.(*jwtClaims)
+	if !ok {
+		return nil, errors.New("发生错误")
+	}
+	if err := TempToken.Claims.Valid(); err != nil {
+		return nil, errors.New("发生错误")
+	}
+	return claims, nil
+}
+
+//获取用户信息
+func GetUserName(UserId string) string {
+	var user Userinfo
+	if err := DB.Table("users").Where("user_id=?", UserId).Find(&user).Error; err != nil {
+		return " "
+	} else {
+		return user.UserName
+	}
+}
+
+func GetUserPicture(UserId string) string {
+	var user Userinfo
+	if err := DB.Table("users").Where("user_id=?", UserId).Find(&user).Error; err != nil {
+		return " "
+	} else {
+		return user.UserPicture
+	}
+}
+
+func GetUserMotto(UserId string) string {
+	var user Userinfo
+	if err := DB.Table("users").Where("user_id=?", UserId).Find(&user).Error; err != nil {
+		return " "
+	} else {
+		return user.Motto
+	}
 }

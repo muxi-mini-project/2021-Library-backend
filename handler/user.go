@@ -47,6 +47,8 @@ func Login(c *gin.Context) {
 			"message": "登录成功",
 			"token":   model.CreateToken(user.UserName, user.UserPassword, user.UserId),
 		})
+		token := model.CreateToken(user.UserName, user.UserPassword, user.UserId)
+		fmt.Println(token)
 		return
 	}
 }

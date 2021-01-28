@@ -13,7 +13,7 @@ func Router(r *gin.Engine) {
 
 	//Group1 := router("/homepage") {
 	//	Group1.GET("/", handler.Homepage)                             //用户主页
-	//	Group1.GET("/:user_id", handler.HomePage)                      //用户主页上用户的信息
+	//Group1.GET("/:user_id", handler.HomePage)                      //用户主页上用户的信息
 	//	Group1.GET("/:user_id/mydigest", handler.MyDigest)            //显示我的发布
 	//	Group1.GET("/:user_id/mydigest/digest_id", handler.digest_id) //从我的发布中查看书摘
 	//	Group1.PUT("/:user_id/mydigest", handler.Ddigest)             //从我的发布删除书摘
