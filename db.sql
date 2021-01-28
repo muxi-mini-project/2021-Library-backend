@@ -13,8 +13,8 @@ CREATE TABLE users (
 	user_id BIGINT NOT NULL AUTO_INCREMENT,
 	user_name VARCHAR(100) NOT NULL,
 	user_password VARCHAR(100) NOT NULL,
-	motto TEXT NOT NULL,
-	user_picture VARCHAR(100) NOT NULL,
+	motto TEXT NULL,
+	user_picture VARCHAR(100) NULL,
 	PRIMARY KEY (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -36,12 +36,13 @@ CREATE TABLE users_books (
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE summary (
+CREATE TABLE summaries (
 	id BIGINT NOT NULL AUTO_INCREMENT,
 	user_id BIGINT NOT NULL,
 	book_id BIGINT NOT NULL,
-	class_id BIGINT NOT NULL,
+	class_id BIGINT NULL,
 	title VARCHAR(100) NOT NULL,
+	chapter TEXT NULL,
 	summary_information TEXT NOT NULL,
 	thought TEXT NOT NULL,
 	date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -49,7 +50,7 @@ CREATE TABLE summary (
 	PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE book_class (
+CREATE TABLE book_classes (
 	class_id BIGINT NOT NULL AUTO_INCREMENT,
 	class_name VARCHAR(100) NOT NULL,
 	class_picture TEXT NOT NULL,
@@ -57,7 +58,7 @@ CREATE TABLE book_class (
 	PRIMARY KEY (class_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE summary_class (
+CREATE TABLE summary_classes (
 	class_id BIGINT NOT NULL AUTO_INCREMENT,
 	class_name VARCHAR(100) NOT NULL,
 	PRIMARY KEY (class_id)
