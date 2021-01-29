@@ -51,3 +51,52 @@ func MyDigest(c *gin.Context) {
 	}
 	c.JSON(200, MyDigestInfo)
 }
+
+//删除我的发布中的书摘
+func DeleteDigest(c *gin.Context) {
+	id := c.Param("digest_id")
+	token := c.Request.Header.Get("token")
+	_, err := model.VerifyToken(token)
+	if err != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
+	err1 := model.RemoveDigest(id)
+	if err1 != nil {
+		c.JSON(401, gin.H{"message": "删除失败"})
+		return
+	}
+	c.JSON(200, gin.H{"message": "删除成功"})
+}
+
+func Deletebooks(c *gin.Context) {
+	id := c.Param("book_id")
+	err := model.RemoveBook(id)
+	if err != nil {
+		c.JSON(401, gin.H{"message": "删除失败"})
+		return
+	}
+	c.JSON(200, gin.H{"message": "删除成功"})
+}
+
+//从我的页面查看我的书摘
+func DigestId(c *gin.Context) {
+	id := c.Param("digest_id")
+	digest, err := model.DigestPage(id)
+	if err != nil {
+		c.JSON(401, gin.H{"message": "查找失败"})
+		return
+	}
+	c.JSON(200, digest)
+}
+
+//从我的页面查看我收藏的图书
+func BookId(c *gin.Context) {
+	id := c.Param("book_id")
+	book, err := model.BookPage(id)
+	if err != nil {
+		c.JSON(401, gin.H{"message": "查找失败"})
+		return
+	}
+	c.JSON(200, book)
+}

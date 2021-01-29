@@ -30,3 +30,14 @@ type DigestInfo struct {
 	DigestDate    string `json:"date" gorm:"date"`
 	Public        bool   `json:"public" gorm:"public"`
 }
+
+type DigestAndClass struct {
+	ClassId  string `json:"class_id" gorm:"class_id"`
+	DigestId string `json:"digest_id" gorm:"digest_id"`
+}
+
+type UserAndBook struct {
+	Id     string `json:"id" gorm:"id"`
+	BookId string `json:"book_id" gorm:"book_id"`
+	UserId string `json:"user_id" gorm:"user_id"`
+}

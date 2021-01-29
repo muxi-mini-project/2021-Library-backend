@@ -198,3 +198,43 @@ func ChangeUserInfo(user Userinfo) error {
 	}
 	return nil
 }
+
+//删除我的发布中的书摘
+func RemoveDigest(DigestId string) error {
+	var summary DigestInfo
+	if err1 := DB.Table("summaries").Where("digest_id=?", DigestId).Delete(&summary).Error; err1 != nil {
+		return err1
+	}
+	var temp DigestAndClass
+	if err2 := DB.Table("summary_class").Where("digest_id=?", DigestId).Delete(&temp).Error; err2 != nil {
+		return err2
+	}
+	return nil
+}
+
+//删除书架上的书
+func RemoveBook(BookId string) error {
+	var UserBook UserAndBook
+	if err := DB.Table("users_books").Where("book_id=?", BookId).Delete(&UserBook).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+//查看书摘
+func DigestPage(DigestId string) (DigestInfo, error) {
+	var digest DigestInfo
+	if err := DB.Table("summaries").Where("id=?", DigestId).Find(&digest).Error; err != nil {
+		return DigestInfo{}, err
+	}
+	return digest, nil
+}
+
+//查看图书
+func BookPage(BookId string) (BooksInfo, error) {
+	var book BooksInfo
+	if err := DB.Table("books").Where("book_id=?", BookId).Error; err != nil {
+		return BooksInfo{}, err
+	}
+	return book, nil
+}
