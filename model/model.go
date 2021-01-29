@@ -1,155 +1,32 @@
 package model
 
-import (
-	"errors"
-	"fmt"
-	"log"
-	"time"
-
-	"github.com/dgrijalva/jwt-go"
-)
-
-func Register(name string, password string) string {
-	//count := 0
-	//if err := DB.Table("users").Count(&count).Error; err != nil {
-	//	log.Println("registerError" + err.Error())
-	//	return ""
-	//}
-	//temp := 0 + count
-	//id := strconv.Itoa(temp)
-	user := Userinfo{UserName: name, UserPassword: password}
-	if err := DB.Table("users").Create(&user).Error; err != nil {
-		fmt.Println("registError" + err.Error())
-		return ""
-	}
-	//DB.Table("users").Create(&user)
-	return user.UserId
+type Userinfo struct {
+	UserId       string `json:"user_id" gorm:"AUTO_INCREMENT"`
+	UserName     string `json:"user_name" gorm:"user_name"`
+	UserPassword string `json:"user_password" gorm:"user_password"`
+	UserPicture  string `json:"user_picture" gorm:"user_picture"`
+	Motto        string
 }
 
-//验证用户是否存在
-func IfExistUser(name string) bool {
-	var user = make([]Userinfo, 1)
-	if err := DB.Table("users").Where("user_name=?", name).Error; err != nil {
-		log.Println(err.Error())
-		return false
-	}
-	if len(user) != 0 {
-		return true
-	}
-	return false
+type BooksInfo struct {
+	BookId      string `json:"book_id" gorm:"book_id"`
+	BookName    string `json:"book_name" gorm:"book_name"`
+	BookPicture string `json:"book_picture" gorm:"book_picture"`
+	BookAuthor  string `json:"book_author" gorm:"book_author"`
+	BookContent string `json:"book_information" gorm:"book_information"`
+	BookClick   int    `json:"click_sum" gorm:"click_sum"`
+	BookClass   string `json:"class_id" gorm:"class_id"`
 }
 
-//验证密码是否正确
-func TestPassword(name string, password string) bool {
-	var user Userinfo
-	if err := DB.Table("users").Where("user_name=? AND user_password=?", name, password).Find(&user).Error; err != nil {
-		log.Println(err.Error())
-		return false
-	}
-	if user.UserName != name || user.UserPassword != password {
-		return false
-	}
-	return true
-}
-
-//获取userId
-func GetId(name string, password string) string {
-	var user Userinfo
-	if err := DB.Table("users").Where("user_name=? AND user_password=?", name, password).Find(&user).Error; err != nil {
-		log.Println(err.Error())
-		return " "
-	} else {
-		return user.UserId
-	}
-}
-
-type jwtClaims struct {
-	jwt.StandardClaims
-	UserId   string `json:"user_id"`
-	UserName string `json:"user_name"`
-	Password string `json:"user_password"`
-}
-
-var (
-	key        = "miniProject" //salt
-	ExpireTime = 3600          //token expire time
-)
-
-func CreateToken(name string, password string, id string) string {
-	//生成token
-	//token := jwt.New(jwt.SigningMethodHS256)
-	claims := &jwtClaims{
-		UserId:   id,
-		UserName: name,
-		Password: password,
-	}
-	//token.Claims = claims
-	//打印一遍
-	//fmt.Println(claims)
-	claims.IssuedAt = time.Now().Unix()
-	claims.ExpiresAt = time.Now().Add(time.Second * time.Duration(ExpireTime)).Unix()
-	singedToken, err := genToken(*claims)
-	if err != nil {
-		log.Print("produceToken err:")
-		fmt.Println(err)
-		return ""
-	}
-	return singedToken
-}
-
-func genToken(claims jwtClaims) (string, error) {
-	//token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, err := token.SignedString([]byte(key))
-	if err != nil {
-		return "", err
-	}
-	return signedToken, nil
-}
-
-var Secret = "sault" //加盐
-//验证token
-func VerifyToken(token string) (*jwtClaims, error) {
-	TempToken, err := jwt.ParseWithClaims(token, &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(Secret), nil
-	})
-	if err != nil {
-		return nil, errors.New("token解析失败")
-	}
-	claims, ok := TempToken.Claims.(*jwtClaims)
-	if !ok {
-		return nil, errors.New("发生错误")
-	}
-	if err := TempToken.Claims.Valid(); err != nil {
-		return nil, errors.New("发生错误")
-	}
-	return claims, nil
-}
-
-//获取用户信息
-func GetUserName(UserId string) string {
-	var user Userinfo
-	if err := DB.Table("users").Where("user_id=?", UserId).Find(&user).Error; err != nil {
-		return " "
-	} else {
-		return user.UserName
-	}
-}
-
-func GetUserPicture(UserId string) string {
-	var user Userinfo
-	if err := DB.Table("users").Where("user_id=?", UserId).Find(&user).Error; err != nil {
-		return " "
-	} else {
-		return user.UserPicture
-	}
-}
-
-func GetUserMotto(UserId string) string {
-	var user Userinfo
-	if err := DB.Table("users").Where("user_id=?", UserId).Find(&user).Error; err != nil {
-		return " "
-	} else {
-		return user.Motto
-	}
+type DigestInfo struct {
+	DigestId    string `json:"id" gorm:"id"`
+	UserId      string `json:"user_id" gorm:"user_id"`
+	BookId      string `json:"book_id" gorm:"book_id"`
+	ClassId     string `json:"class_id" gorm:"class_id"`
+	DigestTitle string `json:"title" gorm:"title"`
+	//摘录的原文
+	DigestContent string `json:"summary_information" gorm:"summary"`
+	DigestIdea    string `json:"thought" gorm:"thought"`
+	DigestDate    string `json:"date" gorm:"date"`
+	Public        bool   `json:"public" gorm:"public"`
 }
