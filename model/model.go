@@ -41,3 +41,7 @@ type UserAndBook struct {
 	BookId string `json:"book_id" gorm:"book_id"`
 	UserId string `json:"user_id" gorm:"user_id"`
 }
+
+type Search struct {
+	Content string `json:"book_name" gorm:"book_name"`
+}

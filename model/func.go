@@ -107,11 +107,11 @@ func genToken(claims jwtClaims) (string, error) {
 	return signedToken, nil
 }
 
-var Secret = "sault" //加盐
+//var Secret = "sault" //加盐
 //验证token
 func VerifyToken(token string) (*jwtClaims, error) {
 	TempToken, err := jwt.ParseWithClaims(token, &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(Secret), nil
+		return []byte(key), nil
 	})
 	if err != nil {
 		return nil, errors.New("token解析失败")
@@ -237,4 +237,32 @@ func BookPage(BookId string) (BooksInfo, error) {
 		return BooksInfo{}, err
 	}
 	return book, nil
+}
+
+func GetResult(content string) ([]BooksInfo, error) {
+	var result []BooksInfo
+	if err := DB.Table("books").Where("book_name=?", content).Find(&result).Error; err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+//获取该书的全部评论
+func GetAllDigest(BookId string) ([]DigestInfo, error) {
+	var digest []DigestInfo
+	if err := DB.Table("summaries").Where("book_id=?", BookId).Find(&digest).Error; err != nil {
+		return nil, err
+	}
+	return digest, nil
+}
+
+//添加书本到我的书架里
+func AddBookToShelf(BookId string, UserId string) error {
+	var new UserAndBook
+	new.UserId = UserId
+	new.BookId = BookId
+	if err := DB.Table("users_books").Create(&new).Error; err != nil {
+		return err
+	}
+	return nil
 }
