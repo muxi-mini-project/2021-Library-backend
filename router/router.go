@@ -10,7 +10,7 @@ func Router(){
 	r := gin.Default()
 
 	//library书城
-	/*v2 := r.Group("/library")
+	v2 := r.Group("/library")
 	{
 
 		//书城主界面
@@ -19,46 +19,52 @@ func Router(){
 		//书城排行榜
 		v2.GET("/ranking", handler.ViewLibraryRanking)
 
+		//书城分类
+		v2.GET("/classes", handler.ViewLibraryClasses)
+
 		//分类下的书籍
-		v2.GET("/:class_id", handler.ViewLibraryClass)
-	}*/
+		v2.GET("/class/:class_id", handler.ViewLibraryClass)
+	}
 
 	//digest书摘
 	v3 := r.Group("/digest")
 	{
 
 		//书摘主界面
-		v3.GET("/:user_id/mysummary", handler.ViewDigest)
+		v3.GET("/mysummary/:user_id", handler.ViewDigest)
 
 		//选择是否公开 //参数summary_id
-		v3.PUT("/:user_id/mysummary", handler.IfPublic)
+		v3.PUT("/mysummary/:user_id", handler.IfPublic)
 
-		//搜索书摘  //参数search
-		v3.POST("/:user_id/mysummary", handler.SearchDigest)
+		//搜索书摘
+		v3.POST("/mysummary/:user_id", handler.SearchDigest)
+
+		//删除书摘 //参数summary_id
+		v3.DELETE("/mysummary/:user_id/delete", handler.DeleteDigest)
 
 		//个人书摘内容
-		/*v3.GET("/:user_id/:digest_id", handler.ViewPersonalDigest)
+		v3.GET("/person/:summary_id", handler.ViewPersonalDigest)
 
 		//编辑书摘
-		v3.PUT("/:user_id/:digest_id", handler.EditDigest)
+		v3.PUT("/person/:summary_id", handler.EditDigest)
 
-		//创作书摘
+		//创作书摘 //参数user_id 和 class_id （默认为0）
 		v3.POST("/", handler.AddDigest)
 
 		//书摘分类
-		v3.GET("/:user_id/mysummary/classes", handler.ViewDigestClasses)
+		v3.GET("/mysummary/:user_id/classes", handler.ViewDigestClasses)
 
 		//分类下的书摘
-		v3.GET("/:user_id/mysummary/:class_id", handler.ViewClassDigest)
+		v3.GET("/mysummary/:user_id/classes/:class_id", handler.ViewClassDigest)
 
 		//编辑书摘分类界面
-		v3.GET("/:user_id/mysummary/classes/edit", handler.EditDigestClasses)
+		v3.GET("/mysummary/:user_id/classes_edit", handler.EditDigestClasses)
 
 		//添加书摘分类
-		v3.POST("/:user_id/mysummary/classes/edit", handler.AddDigestClass)
+		v3.POST("/mysummary/:user_id/classes_add", handler.AddDigestClass)
 
-		//删除书摘类别
-		v3.DELETE("/:user_id/mysummary/classes/edit", handler.DeleteDigestClass)*/
+		//删除书摘类别 //参数class_id
+		v3.DELETE("/mysummary/:user_id/classes_edit", handler.DeleteDigestClass)
 	}
 
 	r.Run()

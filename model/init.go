@@ -17,6 +17,7 @@ func InitDB(DB *gorm.DB) *gorm.DB{
 	DB.AutoMigrate(&Summary{})
 	DB.AutoMigrate(&SummaryClass{})
 	DB.AutoMigrate(&Book{})
+	DB.AutoMigrate(&BookClass{})
 	return DB
 }
 
