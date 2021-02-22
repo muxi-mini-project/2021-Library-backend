@@ -1,11 +1,12 @@
 package handler
 
-import(
-	"study/model"
+import (
+	"2021-Library-backend/model"
+
 	"github.com/gin-gonic/gin"
 )
 
-func ViewLibraryClass(c *gin.Context){
+func ViewLibraryClass(c *gin.Context) {
 	var books []model.Book
 	class_id := c.Param("class_id")
 
@@ -13,7 +14,7 @@ func ViewLibraryClass(c *gin.Context){
 
 	c.JSON(200, gin.H{
 		"message": "获取成功",
-		"data": books,
+		"data":    books,
 	})
 
 }

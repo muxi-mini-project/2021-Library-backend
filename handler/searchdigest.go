@@ -1,14 +1,14 @@
 ﻿package handler
 
-import(
+import (
 	"strings"
 
-	"study/model"
+	"2021-Library-backend/model"
 
 	"github.com/gin-gonic/gin"
 )
 
-func SearchDigest(c *gin.Context){
+func SearchDigest(c *gin.Context) {
 	var summaries, summariesSelect []model.Summary
 	var summaryRow model.SummaryRow
 	var summaryRows []model.SummaryRow
@@ -22,7 +22,7 @@ func SearchDigest(c *gin.Context){
 		c.JSON(400, gin.H{
 			"message": "搜索错误",
 		})
-	return
+		return
 	}
 	word := search.Word
 
@@ -40,7 +40,7 @@ func SearchDigest(c *gin.Context){
 	}
 
 	for i := 0; i < len(summaries); i++ {
-		if strings.Contains(summaries[i].Summary_information + summaries[i].Thought, word) {
+		if strings.Contains(summaries[i].Summary_information+summaries[i].Thought, word) {
 			isHave := false
 			for j := 0; j < len(summariesSelect); j++ {
 				if summaries[i].Id == summariesSelect[j].Id {
@@ -73,8 +73,7 @@ func SearchDigest(c *gin.Context){
 
 	c.JSON(200, gin.H{
 		"message": "获取成功",
-		"data": summaryRows,
+		"data":    summaryRows,
 	})
-
 
 }

@@ -1,11 +1,12 @@
 package handler
 
-import(
-	"study/model"
+import (
+	"2021-Library-backend/model"
+
 	"github.com/gin-gonic/gin"
 )
 
-func ViewLibraryClasses(c *gin.Context){
+func ViewLibraryClasses(c *gin.Context) {
 	var bookClasses []model.BookClass
 	var books []model.Book
 
@@ -24,8 +25,7 @@ func ViewLibraryClasses(c *gin.Context){
 
 	c.JSON(200, gin.H{
 		"message": "获取成功",
-		"data": bookClasses,
+		"data":    bookClasses,
 	})
 
 }
-

@@ -1,15 +1,15 @@
 package handler
 
-import(
+import (
 	"strconv"
 	"time"
 
-	"study/model"
+	"2021-Library-backend/model"
 
 	"github.com/gin-gonic/gin"
 )
 
-func AddDigest(c *gin.Context){
+func AddDigest(c *gin.Context) {
 	var summary model.Summary
 	var summaryInfo model.SummaryInfo
 	var book model.Book
@@ -38,9 +38,9 @@ func AddDigest(c *gin.Context){
 
 	model.DB.Where("book_name = ?", summary.Title).First(&book)
 	/*
-	if book.Book_id == 0 {
-		book.Book_id = 1
-	}
+		if book.Book_id == 0 {
+			book.Book_id = 1
+		}
 	*/
 
 	summary.Book_id = book.Book_id
@@ -51,7 +51,7 @@ func AddDigest(c *gin.Context){
 
 	c.JSON(200, gin.H{
 		"message": "创建成功",
-		"data": summary,
+		"data":    summary,
 	})
 
 }

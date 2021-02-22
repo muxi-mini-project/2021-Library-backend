@@ -1,11 +1,12 @@
 package handler
 
-import(
-	"study/model"
+import (
+	"2021-Library-backend/model"
+
 	"github.com/gin-gonic/gin"
 )
 
-func ViewPersonalDigest(c *gin.Context){
+func ViewPersonalDigest(c *gin.Context) {
 	var summary model.Summary
 	summary_id := c.Param("summary_id")
 
@@ -20,7 +21,7 @@ func ViewPersonalDigest(c *gin.Context){
 
 	c.JSON(200, gin.H{
 		"message": "获取成功",
-		"data": summary,
+		"data":    summary,
 	})
 
 }

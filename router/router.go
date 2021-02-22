@@ -1,12 +1,12 @@
 package router
 
-import(
-	"study/handler"
+import (
+	"2021-Library-backend/handler"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Router(){
+func Router(a *gin.Engine) {
 	r := gin.Default()
 
 	//library书城
@@ -67,5 +67,4 @@ func Router(){
 		v3.DELETE("/mysummary/:user_id/classes_edit", handler.DeleteDigestClass)
 	}
 
-	r.Run()
 }
