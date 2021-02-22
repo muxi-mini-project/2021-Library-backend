@@ -24,7 +24,7 @@ func SearchDigest(c *gin.Context) {
 		})
 		return
 	}
-	word := search.Word
+	word := search.Content
 
 	if len(summaries) <= 0 {
 		c.JSON(200, gin.H{
