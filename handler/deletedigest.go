@@ -1,11 +1,12 @@
 package handler
 
-import(
-	"study/model"
+import (
+	"2021-Library-backend/model"
+
 	"github.com/gin-gonic/gin"
 )
 
-func DeleteDigest(c *gin.Context){
+func DeleteDigest(c *gin.Context) {
 	var summary model.Summary
 	summary_id := c.Query("summary_id")
 

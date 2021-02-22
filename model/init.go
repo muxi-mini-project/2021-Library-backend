@@ -1,24 +1,19 @@
 package model
 
 import (
-	_ "github.com/go-sql-driver/mysql"
+	"fmt"
+
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var DB *gorm.DB
+var err error
 
-func InitDB(DB *gorm.DB) *gorm.DB{
-	dns := "root:********@tcp(127.0.0.1:3306)/study?charset=utf8mb4&parseTime=True&loc=Local"
-	DB, err := gorm.Open("mysql", dns)
+func Initdb() *gorm.DB {
+	DB, err = gorm.Open("mysql", "jingzhe:123@tcp(0.0.0.0:3306)/study?charset=utf8&parseTime=true&loc=Local")
 	if err != nil {
-		panic(err)
+		fmt.Println(err.Error())
 	}
-
-	DB.AutoMigrate(&Summary{})
-	DB.AutoMigrate(&SummaryClass{})
-	DB.AutoMigrate(&Book{})
-	DB.AutoMigrate(&BookClass{})
 	return DB
 }
-
-

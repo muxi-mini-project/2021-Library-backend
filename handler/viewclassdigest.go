@@ -1,14 +1,15 @@
 package handler
 
-import(
-	"study/model"
+import (
+	"2021-Library-backend/model"
+
 	"github.com/gin-gonic/gin"
 )
 
-func ViewClassDigest(c *gin.Context){
+func ViewClassDigest(c *gin.Context) {
 	var summaries []model.Summary
 	var summaryRows []model.SummaryRow
-	var summaryRow	model.SummaryRow
+	var summaryRow model.SummaryRow
 	class_id := c.Param("class_id")
 
 	model.DB.Where("class_id = ?", class_id).Find(&summaries)
@@ -31,7 +32,7 @@ func ViewClassDigest(c *gin.Context){
 
 	c.JSON(200, gin.H{
 		"message": "获取成功",
-		"data": summaryRows,
+		"data":    summaryRows,
 	})
 
 }

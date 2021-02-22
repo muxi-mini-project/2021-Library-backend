@@ -1,11 +1,12 @@
 package handler
 
-import(
-	"study/model"
+import (
+	"2021-Library-backend/model"
+
 	"github.com/gin-gonic/gin"
 )
 
-func EditDigest(c *gin.Context){
+func EditDigest(c *gin.Context) {
 	var summary model.Summary
 	var summaryInfo model.SummaryInfo
 	var book model.Book
@@ -29,25 +30,25 @@ func EditDigest(c *gin.Context){
 	}
 
 	model.DB.Model(&summary).Update(map[string]interface{}{
-		"title": summaryInfo.Title,
-		"chapter":  summaryInfo.Chapter,
+		"title":               summaryInfo.Title,
+		"chapter":             summaryInfo.Chapter,
 		"summary_information": summaryInfo.Summary_information,
-		"thought": summaryInfo.Thought,
-		"public": summaryInfo.Public,
+		"thought":             summaryInfo.Thought,
+		"public":              summaryInfo.Public,
 	})
 
 	model.DB.Where("book_name = ?", summary.Title).First(&book)
 	/*
-	if book.Book_id == 0 {
-		book.Book_id = 1
-	}
+		if book.Book_id == 0 {
+			book.Book_id = 1
+		}
 	*/
 
 	model.DB.Model(&summary).Update("book_id", book.Book_id)
 
 	c.JSON(200, gin.H{
 		"message": "编辑成功",
-		"data": summary,
+		"data":    summary,
 	})
 
 }
