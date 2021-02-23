@@ -102,3 +102,6 @@ type UserAndBook struct {
 	BookId string `json:"book_id" gorm:"book_id"`
 	UserId string `json:"user_id" gorm:"user_id"`
 }
+type Token struct {
+	Token string `json:"token"`
+}

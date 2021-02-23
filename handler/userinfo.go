@@ -6,6 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "用户界面"
+// @Description "获取用户的基本信息"
+// @Tags my
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.Userinfo
+// @Failure 404 "获取失败"
+// Router /homepage/:user_id/info [get]
 func Userinfo(c *gin.Context) {
 	id := c.Param("user_id")
 	Userinformation, err := model.GetUserInfo(id)
@@ -15,7 +23,16 @@ func Userinfo(c *gin.Context) {
 	c.JSON(200, Userinformation)
 }
 
-//修改密码的 hendel
+// @Summary "修改用户的信息"
+// @Description "修改用户的基本信息"
+// @Tags my
+// @Accept json
+// @Produce json
+// @Param toekn header string true "token"
+// @Success 200 "修改成功"
+// @Failure 401 "验证失败"
+// @Failure 400 "修改失败"
+// @Router /homepage/:user_id/info [put]
 func ChangeInformation(c *gin.Context) {
 	var user model.Userinfo
 	id := c.Param("user_id")

@@ -6,6 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary 删除书摘的分类
+// @Description "删除我的书摘分类里的类别"
+// @Tags digest
+// @Accept json
+// @Produce json
+// @Success 200 "成功删除"
+// @Router /digest/mysummary/:user_id/clasees_edit [delete]
 func DeleteDigestClass(c *gin.Context) {
 	var summaryClass model.SummaryClass
 	var summaries []model.Summary

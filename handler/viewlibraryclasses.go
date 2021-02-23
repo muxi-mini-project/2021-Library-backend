@@ -6,6 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "分类的书籍"
+// @Description "显示该类别下的书籍"
+// @Tags library
+// @Accept json
+// @Produce json
+// @Success 200 "获取成功"
+// @Router /library/class/:class_id [get]
 func ViewLibraryClasses(c *gin.Context) {
 	var bookClasses []model.BookClass
 	var books []model.Book

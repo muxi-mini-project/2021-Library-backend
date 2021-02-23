@@ -6,6 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "书城"
+// @Description "显示书城主界面"
+// @Tags library
+// @Accept json
+// @Produce json
+// @Success 200 "获取成功"
+// @Router /library [get]
 func ViewLibrary(c *gin.Context) {
 	var books []model.Book
 	var booksShow []model.Book

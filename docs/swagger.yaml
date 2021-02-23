@@ -1,0 +1,506 @@
+definitions:
+  model.BooksInfo:
+    properties:
+      book_author:
+        type: string
+      book_id:
+        type: string
+      book_information:
+        type: string
+      book_name:
+        type: string
+      book_picture:
+        type: string
+      class_id:
+        type: string
+      click_sum:
+        type: integer
+    type: object
+  model.DigestInfo:
+    properties:
+      book_id:
+        type: string
+      class_id:
+        type: string
+      date:
+        type: string
+      id:
+        type: string
+      public:
+        type: boolean
+      summary_information:
+        description: 摘录的原文
+        type: string
+      thought:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.Token:
+    properties:
+      token:
+        type: string
+    type: object
+  model.Userinfo:
+    properties:
+      motto:
+        type: string
+      user_id:
+        type: string
+      user_name:
+        type: string
+      user_password:
+        type: string
+      user_picture:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a project made by CCNU 书斋
+  title: 2021-miniproject-Library
+  version: "1.0"
+paths:
+  /Library/:books_id:
+    get:
+      consumes:
+      - application/json
+      description: '"从书城进入书籍"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BooksInfo'
+        "401":
+          description: 查找失败
+      summary: '"书籍信息"'
+      tags:
+      - library
+  /Library/:books_id/digest:
+    get:
+      consumes:
+      - application/json
+      description: '"从书城进入书本获取的关于这个书的书摘信息"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DigestInfo'
+        "404":
+          description: 获取失败
+      summary: '"书本的书摘信息"'
+      tags:
+      - library
+  /Library/addbook/:books_id:
+    post:
+      consumes:
+      - application/json
+      description: '"通过书本上面的添加按钮来实现添加"'
+      parameters:
+      - description: token
+        in: header
+        name: toekn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 添加成功
+        "400":
+          description: 添加失败
+        "401":
+          description: 验证失败
+      summary: '"添加书本到我的书架"'
+      tags:
+      - library
+  /Library/seacher:
+    post:
+      consumes:
+      - application/json
+      description: '"在书城中搜索书本"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 搜索成功
+          schema:
+            $ref: '#/definitions/model.BooksInfo'
+        "401":
+          description: 请重试
+        "404":
+          description: 搜索不到
+      summary: '"搜索书本"'
+      tags:
+      - library
+  /digest:
+    post:
+      consumes:
+      - application/json
+      description: 将创建的新书摘加入数据库中
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 创建成功
+        "400":
+          description: 编辑错误
+      summary: 添加书摘
+      tags:
+      - digest
+  /digest/mysummary/:user_id:
+    get:
+      consumes:
+      - application/json
+      description: '"具体信息"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+      summary: '"书摘主界面"'
+      tags:
+      - digest
+    post:
+      consumes:
+      - application/json
+      description: '"搜索书摘的信息"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+        "400":
+          description: 搜索错误
+      summary: '"搜索"'
+      tags:
+      - digest
+    put:
+      consumes:
+      - application/json
+      description: '"通过按钮来确定是否公开这个书摘"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 修改成功
+        "401":
+          description: 修改失败
+      summary: '"是否公开"'
+      tags:
+      - digest
+  /digest/mysummary/:user_id/clasees_edit:
+    delete:
+      consumes:
+      - application/json
+      description: '"删除我的书摘分类里的类别"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功删除
+      summary: 删除书摘的分类
+      tags:
+      - digest
+  /digest/mysummary/:user_id/classes:
+    get:
+      consumes:
+      - application/json
+      description: '"书摘的各种类别"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+      summary: '"书摘分类"'
+      tags:
+      - digest
+  /digest/mysummary/:user_id/classes_edit:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+      summary: '"获取我的书摘分类"'
+      tags:
+      - digest
+  /digest/person/:summary_id:
+    put:
+      consumes:
+      - application/json
+      description: '"通过编辑修改我发布的书摘"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 编辑成功
+        "400":
+          description: 编辑错误
+        "404":
+          description: 编辑失败，数据为空
+      summary: '"编辑书摘"'
+      tags:
+      - digest
+  /homepage/:user_id:
+    get:
+      consumes:
+      - application/json
+      description: '"通过我的id进入我的主页"'
+      operationId: get-string-by-int
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg":"success"}'
+          schema:
+            $ref: '#/definitions/model.Userinfo'
+        "404":
+          description: 找不到该用户的信息
+      summary: '"我的主页"'
+      tags:
+      - my
+  /homepage/:user_id/info:
+    put:
+      consumes:
+      - application/json
+      description: '"修改用户的基本信息"'
+      parameters:
+      - description: token
+        in: header
+        name: toekn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 修改成功
+        "400":
+          description: 修改失败
+        "401":
+          description: 验证失败
+      summary: '"修改用户的信息"'
+      tags:
+      - my
+  /homepage/:user_id/mydigest:
+    get:
+      consumes:
+      - application/json
+      description: '"显示我的发布中的书摘的有关信息"'
+      parameters:
+      - description: token
+        in: header
+        name: toekn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg":"success"}'
+          schema:
+            $ref: '#/definitions/model.DigestInfo'
+        "404":
+          description: 获取失败
+      summary: '"我的发布"'
+      tags:
+      - my
+  /homepage/:user_id/mydigest/digest_id:
+    get:
+      consumes:
+      - application/json
+      description: '"获取我的书=书摘的具体信息"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.DigestInfo'
+        "401":
+          description: 获取失败
+      summary: '"查看我的发布中书摘的具体信息"'
+      tags:
+      - my
+    put:
+      consumes:
+      - application/json
+      description: '"删除我的发布中的书摘"'
+      parameters:
+      - description: token
+        in: header
+        name: toekn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+        "401":
+          description: 删除失败
+        "404":
+          description: 认证失败
+      summary: '"删除我的发布"'
+      tags:
+      - my
+  /homepage/:user_id/shelf:
+    get:
+      consumes:
+      - application/json
+      description: '"通过用户的id获得该用户的书架上书本的信息"'
+      parameters:
+      - description: token
+        in: header
+        name: toekn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"msg":"success"}'
+          schema:
+            $ref: '#/definitions/model.BooksInfo'
+        "404":
+          description: 获取失败
+      summary: '"我的书架"'
+      tags:
+      - my
+  /homepage/:user_id/shelf/book_id:
+    get:
+      consumes:
+      - application/json
+      description: '"查看我的书本的具体信息"'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.BooksInfo'
+        "401":
+          description: 查找失败
+      summary: '"我收藏的书"'
+      tags:
+      - my
+  /homepage/:user_id/shelf/books_id:
+    put:
+      consumes:
+      - application/json
+      description: '"删除数据库中这本书与该用户的关系"'
+      parameters:
+      - description: token
+        in: header
+        name: toekn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+        "401":
+          description: 删除失败
+      summary: '"删除我的书架上的书"'
+      tags:
+      - my
+  /library:
+    get:
+      consumes:
+      - application/json
+      description: '"显示书城主界面"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+      summary: '"书城"'
+      tags:
+      - library
+  /library/class/:class_id:
+    get:
+      consumes:
+      - application/json
+      description: '"显示该类别下的书籍"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+      summary: '"分类的书籍"'
+      tags:
+      - library
+  /library/classes:
+    get:
+      consumes:
+      - application/json
+      description: '"书本的各种类别"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+      summary: '"书籍分类"'
+      tags:
+      - library
+  /library/ranking:
+    get:
+      consumes:
+      - application/json
+      description: '"通过点击量对书本的热度进行排序"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+      summary: '"书城排行榜"'
+      tags:
+      - library
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: '"验证用户信息实现登入"'
+      responses:
+        "200":
+          description: 登入成功
+          schema:
+            $ref: '#/definitions/model.Token'
+        "400":
+          description: 输入格式错误
+        "401":
+          description: 密码错误
+        "404":
+          description: 用户不存在
+      summary: '"登入"'
+      tags:
+      - login
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: '"注册一个新用户"'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 注册成功
+        "400":
+          description: 输入有误，格式错误
+      summary: '"注册"'
+      tags:
+      - user
+swagger: "2.0"
