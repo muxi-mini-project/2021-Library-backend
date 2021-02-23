@@ -6,6 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "是否公开"
+// @Description "通过按钮来确定是否公开这个书摘"
+// @Tags digest
+// @Accept json
+// @Produce json
+// @Success 200 "修改成功"
+// @Failure 401 "修改失败"
+// @Router /digest/mysummary/:user_id [put]
 func IfPublic(c *gin.Context) {
 	var summary model.Summary
 	summary_id := c.Query("summary_id")

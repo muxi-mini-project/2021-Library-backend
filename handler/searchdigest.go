@@ -8,6 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "搜索"
+// @Description "搜索书摘的信息"
+// @Tags digest
+// @Accept json
+// @Produce json
+// @Success 200 "获取成功"
+// @Failure 400 "搜索错误"
+// @Router /digest/mysummary/:user_id [post]
 func SearchDigest(c *gin.Context) {
 	var summaries, summariesSelect []model.Summary
 	var summaryRow model.SummaryRow

@@ -7,6 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "注册"
+// @Description "注册一个新用户"
+// @tags user
+// @Accept json
+// @Produce json
+// @Success 200 "注册成功"
+// @Failure 400 "输入有误，格式错误"
+// @Router /user [post]
 func User(c *gin.Context) {
 	type users struct {
 		UserName     string `json:"user_name"`
@@ -25,6 +33,16 @@ func User(c *gin.Context) {
 	})
 }
 
+// @Summary "登入"
+// @Description "验证用户信息实现登入"
+// @Tags login
+// @Accept json
+// @Producer json
+// @Success 200 {object} model.Token "登入成功"
+// @Failure 400 "输入格式错误"
+// @Failure 404 "用户不存在"
+// @Failure 401 "密码错误"
+// @Router /login [post]
 func Login(c *gin.Context) {
 	var user model.Userinfo
 	if err := c.BindJSON(&user); err != nil {

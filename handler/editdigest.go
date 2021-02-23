@@ -6,6 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "编辑书摘"
+// @Description "通过编辑修改我发布的书摘"
+// @Tags digest
+// @Accept json
+// @Produce json
+// @Success 200 "编辑成功"
+// @Failure 404 "编辑失败，数据为空"
+// @Failure 400 "编辑错误"
+// @Router /digest/person/:summary_id [put]
 func EditDigest(c *gin.Context) {
 	var summary model.Summary
 	var summaryInfo model.SummaryInfo

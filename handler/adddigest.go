@@ -9,6 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary 添加书摘
+// @Description 将创建的新书摘加入数据库中
+// @Tags digest
+// @Accept json
+// @Produce json
+// @Success 200  "创建成功"
+// @Failure 400 "编辑错误"
+// @Router /digest [post]
 func AddDigest(c *gin.Context) {
 	var summary model.Summary
 	var summaryInfo model.SummaryInfo

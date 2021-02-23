@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary 添加书摘的分类
+// @Description "添加属于自己的书摘分类"
+// @Tags digest
+// @Accept json
+// @Produce json
+// @Success 200 "添加成功"
+// @Failure 400 "编辑错误"
+// @Router /digest/mysummary/:user_id/classes_add [post]
+
 func AddDigestClass(c *gin.Context) {
 	var summaryClass model.SummaryClass
 	var summaryClassName model.SummaryClassName

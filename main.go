@@ -10,6 +10,14 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
+// @title 2021-miniproject-Library
+// @version 1.0
+// @description This is a project made by CCNU 书斋
+
+// @BaesPath /Library/v1/
+
+// @Schemas http
+
 func main() {
 	r := gin.Default()
 

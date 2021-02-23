@@ -6,6 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "分类下的书摘"
+// @Description "每个分类下的书摘"
+// @Tags digest
+// @Accept json
+// @Produce json
+// @Success 200 "获取成功"
+// @Router /digest/mysummary/:user_id/classes [get]
 func ViewClassDigest(c *gin.Context) {
 	var summaries []model.Summary
 	var summaryRows []model.SummaryRow

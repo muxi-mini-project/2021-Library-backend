@@ -6,6 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "我的主页"
+// @Description "通过我的id进入我的主页"
+// @Tags my
+// @Id get-string-by-int
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Success 200 {object} model.Userinfo"{"msg":"success"}
+// @Failure 404 "找不到该用户的信息"
+// @Router /homepage/:user_id [get]
 func HomePage(c *gin.Context) {
 	id := c.Param("user_id")
 	token := c.Request.Header.Get("token")
@@ -21,6 +31,15 @@ func HomePage(c *gin.Context) {
 	c.JSON(200, userinfo)
 }
 
+// @Summary "我的书架"
+// @Description "通过用户的id获得该用户的书架上书本的信息"
+// @Tags my
+// @Accept json
+// @Produce json
+// @Param toekn header string true "token"
+// @Success 200 {object} model.BooksInfo"{"msg":"success"}"
+// @Failure 404 "获取失败"
+// @Router /homepage/:user_id/shelf [get]
 func Shelf(c *gin.Context) {
 	id := c.Param("user_id")
 	token := c.Request.Header.Get("token")
@@ -37,6 +56,15 @@ func Shelf(c *gin.Context) {
 	c.JSON(200, BooksThings)
 }
 
+// @Summary "我的发布"
+// @Description "显示我的发布中的书摘的有关信息"
+// @Tags my
+// @Accept json
+// @Produce json
+// @Param toekn header string true "token"
+// @Success 200 {object} model.DigestInfo "{"msg":"success"}"
+// @Failure 404 "获取失败"
+// @Router /homepage/:user_id/mydigest [get]
 func MyDigest(c *gin.Context) {
 	id := c.Param("user_id")
 	token := c.Request.Header.Get("token")
@@ -52,7 +80,16 @@ func MyDigest(c *gin.Context) {
 	c.JSON(200, MyDigestInfo)
 }
 
-//删除我的发布中的书摘
+// @Summary "删除我的发布"
+// @Description "删除我的发布中的书摘"
+// @Tags my
+// @Accept json
+// @Produce json
+// @Param toekn header string true "token"
+// @Success 200 "删除成功"
+// @Failure 404 "认证失败"
+// @Failure 401 "删除失败"
+// @Router /homepage/:user_id/mydigest/digest_id [put]
 func DeleteDigest(c *gin.Context) {
 	id := c.Param("digest_id")
 	token := c.Request.Header.Get("token")
@@ -69,6 +106,15 @@ func DeleteDigest(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "删除成功"})
 }
 
+// @Summary "删除我的书架上的书"
+// @Description "删除数据库中这本书与该用户的关系"
+// @Tags my
+// @Accept json
+// @Produce json
+// @Param toekn header string true "token"
+// @Success 200 "删除成功"
+// @Failure 401 "删除失败"
+// @Router /homepage/:user_id/shelf/books_id [put]
 func Deletebooks(c *gin.Context) {
 	id := c.Param("book_id")
 	err := model.RemoveBook(id)
@@ -79,7 +125,14 @@ func Deletebooks(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "删除成功"})
 }
 
-//从我的页面查看我的书摘
+// @Summary "查看我的发布中书摘的具体信息"
+// @Description "获取我的书=书摘的具体信息"
+// @Tags my
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.DigestInfo
+// @Failure 401 "获取失败"
+// @Router /homepage/:user_id/mydigest/digest_id [get]
 func DigestId(c *gin.Context) {
 	id := c.Param("digest_id")
 	digest, err := model.DigestPage(id)
@@ -90,7 +143,14 @@ func DigestId(c *gin.Context) {
 	c.JSON(200, digest)
 }
 
-//从我的页面查看我收藏的图书
+// @Summary "我收藏的书"
+// @Description "查看我的书本的具体信息"
+// @Tags my
+// @Accept json
+// @Producer json
+// @Success 200 {object} model.BooksInfo
+// @Failure 401 "查找失败"
+// @Router /homepage/:user_id/shelf/book_id [get]
 func BookId(c *gin.Context) {
 	id := c.Param("book_id")
 	book, err := model.BookPage(id)

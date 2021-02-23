@@ -6,6 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "书城排行榜"
+// @Description "通过点击量对书本的热度进行排序"
+// @Tags library
+// @Accept json
+// @Produce json
+// @Success 200 "获取成功"
+// @Router /library/ranking [get]
 func ViewLibraryRanking(c *gin.Context) {
 	var books []model.Book
 	var booksShow []model.Book
