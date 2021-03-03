@@ -6,6 +6,9 @@ import(
 )
 
 func ViewLibrary(c *gin.Context){
+
+	Spider()
+
 	var books []model.Book
 	var booksShow []model.Book
 	num := 15 //推荐出的书目数
