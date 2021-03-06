@@ -104,7 +104,7 @@ func MyDigest(c *gin.Context) {
 // @Router /homepage/:user_id/mydigest/digest_id [put]
 func DeleteDigest(c *gin.Context) {
 	Digestid := c.Param("digest_id")
-	fmt.Println(Digestid)
+	//fmt.Println(Digestid)
 	token := c.Request.Header.Get("token")
 	_, err := model.VerifyToken(token)
 	if err != nil {
