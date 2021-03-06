@@ -1,5 +1,6 @@
 package model
 
+//胡翔瑞
 //映射于数据库
 type Summary struct {
 	Id                  int64  `json:"id"`
@@ -61,6 +62,7 @@ type Search struct {
 	Content string `json:"book_name" gorm:"book_name"`
 }
 
+//李劲哲
 type Userinfo struct {
 	UserId       string `json:"user_id" gorm:"AUTO_INCREMENT"`
 	UserName     string `json:"user_name" gorm:"user_name"`

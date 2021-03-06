@@ -14,9 +14,12 @@ import (
 // @Success 200 "获取成功"
 // @Router /library [get]
 func ViewLibrary(c *gin.Context) {
+
+	Spider()
+
 	var books []model.Book
 	var booksShow []model.Book
-	num := 15 //推荐出的书目数
+	num := 20 //推荐出的书目数
 
 	model.DB.Find(&books)
 
