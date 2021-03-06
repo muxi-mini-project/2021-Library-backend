@@ -20,7 +20,7 @@ func Register(name string, password string) string {
 	user := Userinfo{UserName: name, UserPassword: password}
 	if err := DB.Table("users").Create(&user).Error; err != nil {
 		fmt.Println("registError" + err.Error())
-		return ""
+		return " "
 	}
 	//DB.Table("users").Create(&user)
 	return user.UserId
@@ -29,11 +29,11 @@ func Register(name string, password string) string {
 //验证用户是否存在
 func IfExistUser(name string) bool {
 	var user = make([]Userinfo, 1)
-	if err := DB.Table("users").Where("user_name=?", name).Error; err != nil {
+	if err := DB.Table("users").Where("user_name=?", name).Find(&user).Error; err != nil {
 		log.Println(err.Error())
 		return false
 	}
-	if len(user) != 0 {
+	if len(user) != 1 {
 		return true
 	}
 	return false
@@ -63,6 +63,7 @@ func GetId(name string, password string) string {
 	}
 }
 
+//生成token与验证
 type jwtClaims struct {
 	jwt.StandardClaims
 	UserId   string `json:"user_id"`
@@ -70,9 +71,20 @@ type jwtClaims struct {
 	Password string `json:"user_password"`
 }
 
+/*func GetToken(claims *JwtClaims) string {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	signedToken, err := token.SignedString([]byte(key))
+	if err != nil {
+		log.Println(err)
+		return ""
+	}
+	return signedToken
+}
+*/
+
 var (
 	key        = "miniProject" //salt
-	ExpireTime = 3600          //token expire time
+	ExpireTime = 604800        //token expire time
 )
 
 func CreateToken(name string, password string, id string) string {
@@ -107,23 +119,23 @@ func genToken(claims jwtClaims) (string, error) {
 	return signedToken, nil
 }
 
-//var Secret = "sault" //加盐
+//var key = "sault" //加盐
 //验证token
-func VerifyToken(token string) (*jwtClaims, error) {
+func VerifyToken(token string) (string, error) {
 	TempToken, err := jwt.ParseWithClaims(token, &jwtClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
 	if err != nil {
-		return nil, errors.New("token解析失败")
+		return "", errors.New("token解析失败")
 	}
 	claims, ok := TempToken.Claims.(*jwtClaims)
 	if !ok {
-		return nil, errors.New("发生错误")
+		return "", errors.New("发生错误")
 	}
 	if err := TempToken.Claims.Valid(); err != nil {
-		return nil, errors.New("发生错误")
+		return "", errors.New("发生错误")
 	}
-	return claims, nil
+	return claims.UserId, nil
 }
 
 //获取用户信息
@@ -154,20 +166,34 @@ func GetUserMotto(UserId string) string {
 	}
 }
 
+type temp struct {
+	Id     int64  `gorm:"column:id"`
+	UserId string `gorm:"column:user_id"`
+	BookId string `gorm:"column:book_id"`
+}
+
 //获取我的书本的id
-func GetMyBooksId(UserId string) []func() {
-	var bookId []func()
-	if err := DB.Table("users_books").Where("user_id=?", UserId).Find(&bookId).Error; err != nil {
-		return bookId
+func GetMyBooksId(UserId string) []string {
+	var Id []string
+	var BookId []temp
+	fmt.Println(UserId)
+	if err := DB.Table("users_books").Where("user_id=?", UserId).Find(&BookId).Error; err != nil {
+		log.Println(err)
+		return nil
 	} else {
-		return bookId
+		fmt.Println(BookId)
+		for _, id := range BookId {
+			Id = append(Id, string(id.BookId))
+			fmt.Println(id.BookId)
+		}
+		return Id
 	}
 }
 
 //获取我的书架上书本的详情
-func GetMyBooksinfo(BooksId []func()) ([]BooksInfo, error) {
+func GetMyBooksinfo(BooksId []string) ([]BooksInfo, error) {
 	var Books []BooksInfo
-	if err := DB.Table("books").Where("book_id=?", BooksId).Find(&Books).Error; err != nil {
+	if err := DB.Table("books").Where("book_id in (?)", BooksId).Find(&Books).Error; err != nil {
 		return nil, err
 	}
 	return Books, nil
@@ -193,7 +219,8 @@ func GetUserInfo(UserId string) (Userinfo, error) {
 
 //修改用户信息
 func ChangeUserInfo(user Userinfo) error {
-	if err := DB.Table("users").Where("user_id=?", user.UserId).Updates(map[string]interface{}{"user_name": "user.UserName", "user_password": "user.UserPassword", "user_picture": "user.UserPicture", "motto": "Motto"}).Error; err != nil {
+	fmt.Println(user.UserId)
+	if err := DB.Table("users").Where("user_id=?", user.UserId).Updates(map[string]interface{}{"user_name": user.UserName, "user_password": user.UserPassword, "user_picture": user.UserPicture, "motto": user.Motto}).Error; err != nil {
 		return err
 	}
 	return nil
@@ -202,13 +229,13 @@ func ChangeUserInfo(user Userinfo) error {
 //删除我的发布中的书摘
 func RemoveDigest(DigestId string) error {
 	var summary DigestInfo
-	if err1 := DB.Table("summaries").Where("digest_id=?", DigestId).Delete(&summary).Error; err1 != nil {
+	if err1 := DB.Table("summaries").Where("id=?", DigestId).Delete(&summary).Error; err1 != nil {
 		return err1
 	}
-	var temp DigestAndClass
-	if err2 := DB.Table("summary_class").Where("digest_id=?", DigestId).Delete(&temp).Error; err2 != nil {
-		return err2
-	}
+	//var temp DigestAndClass
+	//if err2 := DB.Table("summary_classes").Where("id=?", DigestId).Delete(&temp).Error; err2 != nil {
+	//	return err2
+	//}
 	return nil
 }
 
@@ -227,22 +254,26 @@ func DigestPage(DigestId string) (DigestInfo, error) {
 	if err := DB.Table("summaries").Where("id=?", DigestId).Find(&digest).Error; err != nil {
 		return DigestInfo{}, err
 	}
+	//fmt.Println(digest.DigestContent)
 	return digest, nil
 }
 
 //查看图书
 func BookPage(BookId string) (BooksInfo, error) {
 	var book BooksInfo
-	if err := DB.Table("books").Where("book_id=?", BookId).Error; err != nil {
+	//fmt.Println(BookId)
+	if err := DB.Table("books").Where("book_id=?", BookId).Find(&book).Error; err != nil {
+		log.Println(err)
 		return BooksInfo{}, err
 	}
 	return book, nil
 }
 
-func GetResult(content string) ([]BooksInfo, error) {
-	var result []BooksInfo
+func GetResult(content string) (BooksInfo, error) {
+	var result BooksInfo
+	//fmt.Println(content)
 	if err := DB.Table("books").Where("book_name=?", content).Find(&result).Error; err != nil {
-		return nil, err
+		return BooksInfo{}, err
 	}
 	return result, nil
 }

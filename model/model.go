@@ -70,13 +70,13 @@ type Userinfo struct {
 }
 
 type BooksInfo struct {
-	BookId      string `json:"book_id" gorm:"book_id"`
-	BookName    string `json:"book_name" gorm:"book_name"`
-	BookPicture string `json:"book_picture" gorm:"book_picture"`
-	BookAuthor  string `json:"book_author" gorm:"book_author"`
-	BookContent string `json:"book_information" gorm:"book_information"`
-	BookClick   int    `json:"click_sum" gorm:"click_sum"`
-	BookClass   string `json:"class_id" gorm:"class_id"`
+	BookId      string `json:"book_id" gorm:"column:book_id"`
+	BookName    string `json:"book_name" gorm:"column:book_name"`
+	BookPicture string `json:"book_picture" gorm:"column:book_picture"`
+	BookAuthor  string `json:"book_auther" gorm:"column:book_auther"`
+	BookContent string `json:"book_information" gorm:"column:book_information"`
+	BookClick   int    `json:"click_sum" gorm:"column:click_sum"`
+	BookClass   string `json:"class_id" gorm:"column:class_id"`
 }
 
 type DigestInfo struct {
@@ -84,12 +84,13 @@ type DigestInfo struct {
 	UserId      string `json:"user_id" gorm:"user_id"`
 	BookId      string `json:"book_id" gorm:"book_id"`
 	ClassId     string `json:"class_id" gorm:"class_id"`
-	DigestTitle string `json:"title" gorm:"title"`
+	DigestTitle string `json:"title" gorm:"column:title"`
+	chapter     string `gorm:"column:chapter"`
 	//摘录的原文
-	DigestContent string `json:"summary_information" gorm:"summary"`
-	DigestIdea    string `json:"thought" gorm:"thought"`
-	DigestDate    string `json:"date" gorm:"date"`
-	Public        bool   `json:"public" gorm:"public"`
+	DigestContent string `json:"summary_information" gorm:"column:summary_information"`
+	DigestIdea    string `json:"thought" gorm:"column:thought"`
+	DigestDate    string `json:"date" gorm:"column:date"`
+	Public        bool   `json:"public" gorm:"column:public"`
 }
 
 type DigestAndClass struct {

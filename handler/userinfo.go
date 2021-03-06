@@ -2,6 +2,7 @@ package handler
 
 import (
 	"2021-Library-backend/model"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +16,11 @@ import (
 // @Failure 404 "获取失败"
 // Router /homepage/:user_id/info [get]
 func Userinfo(c *gin.Context) {
-	id := c.Param("user_id")
+	token := c.Request.Header.Get("token")
+	id, err := model.VerifyToken(token)
+	if err != nil {
+		c.JSON(401, gin.H{"message": "验证失败"})
+	}
 	Userinformation, err := model.GetUserInfo(id)
 	if err != nil {
 		c.JSON(404, gin.H{"message": "获取失败"})
@@ -35,9 +40,9 @@ func Userinfo(c *gin.Context) {
 // @Router /homepage/:user_id/info [put]
 func ChangeInformation(c *gin.Context) {
 	var user model.Userinfo
-	id := c.Param("user_id")
+	//id := c.Param("user_id")
 	token := c.Request.Header.Get("token")
-	_, err := model.VerifyToken(token)
+	id, err := model.VerifyToken(token)
 	if err != nil {
 		c.JSON(401, gin.H{"message": "验证失败"})
 	}
@@ -46,6 +51,7 @@ func ChangeInformation(c *gin.Context) {
 		return
 	}
 	user.UserId = id
+	fmt.Println(user.UserId)
 	if err2 := model.ChangeUserInfo(user); err2 != nil {
 		c.JSON(400, gin.H{"message": "修改失败"})
 		return
