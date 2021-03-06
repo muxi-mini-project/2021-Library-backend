@@ -22,6 +22,7 @@ func Searcher(c *gin.Context) {
 		return
 	}
 	result, err2 := model.GetResult(temp.Content)
+	//fmt.Println(temp.Content)
 	if err2 != nil {
 		c.JSON(404, gin.H{"message": "搜索不到"})
 		return
@@ -78,11 +79,11 @@ func Digest(c *gin.Context) {
 func AddBook(c *gin.Context) {
 	id := c.Param("books_id")
 	token := c.Request.Header.Get("token")
-	result, err1 := model.VerifyToken(token)
+	userid, err1 := model.VerifyToken(token)
 	if err1 != nil {
 		c.JSON(401, gin.H{"message": "验证失败"})
 	}
-	userid := result.UserId
+
 	err := model.AddBookToShelf(id, userid)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "添加失败"})

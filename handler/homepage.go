@@ -2,6 +2,7 @@ package handler
 
 import (
 	"2021-Library-backend/model"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,13 +18,19 @@ import (
 // @Failure 404 "找不到该用户的信息"
 // @Router /homepage/:user_id [get]
 func HomePage(c *gin.Context) {
-	id := c.Param("user_id")
 	token := c.Request.Header.Get("token")
-	_, err := model.VerifyToken(token)
+	id, err := model.VerifyToken(token)
 	if err != nil {
 		c.JSON(404, gin.H{"message": "找不到该用户的信息"})
 		return
-	}
+	} //id := c.Param("user_id")
+	//token := c.Request.Header.Get("token")
+	//_, err := model.VerifyToken(token)
+	//if err != nil {
+	//	c.JSON(404, gin.H{"message": "找不到该用户的信息"})
+	//	return
+	//}
+	fmt.Println(id)
 	MyName := model.GetUserName(id)
 	MyPicture := model.GetUserPicture(id)
 	MyMotto := model.GetUserMotto(id)
@@ -41,14 +48,16 @@ func HomePage(c *gin.Context) {
 // @Failure 404 "获取失败"
 // @Router /homepage/:user_id/shelf [get]
 func Shelf(c *gin.Context) {
-	id := c.Param("user_id")
+	//id := c.Param("user_id")
 	token := c.Request.Header.Get("token")
-	_, err := model.VerifyToken(token)
+	id, err := model.VerifyToken(token)
 	if err != nil {
 		c.JSON(404, gin.H{"message": "找不到该用户的信息"})
 		return
 	}
+	fmt.Println(id)
 	Mybooks := model.GetMyBooksId(id)
+	fmt.Println(Mybooks)
 	BooksThings, err1 := model.GetMyBooksinfo(Mybooks)
 	if err1 != nil {
 		c.JSON(404, gin.H{"message": "获取失败"})
@@ -66,14 +75,17 @@ func Shelf(c *gin.Context) {
 // @Failure 404 "获取失败"
 // @Router /homepage/:user_id/mydigest [get]
 func MyDigest(c *gin.Context) {
-	id := c.Param("user_id")
+	//id := c.Param("user_id")
 	token := c.Request.Header.Get("token")
-	_, err := model.VerifyToken(token)
+	id, err := model.VerifyToken(token)
 	if err != nil {
 		c.JSON(404, gin.H{"message": "找不到该信息"})
 		return
 	}
 	MyDigestInfo, err := model.GetMyDigest(id)
+	//for _, x := range MyDigestInfo {
+	//fmt.Println(x.UserId)
+	//}
 	if err != nil {
 		c.JSON(404, gin.H{"message": "获取失败"})
 	}
@@ -91,14 +103,15 @@ func MyDigest(c *gin.Context) {
 // @Failure 401 "删除失败"
 // @Router /homepage/:user_id/mydigest/digest_id [put]
 func DeleteDigest(c *gin.Context) {
-	id := c.Param("digest_id")
+	Digestid := c.Param("digest_id")
+	fmt.Println(Digestid)
 	token := c.Request.Header.Get("token")
 	_, err := model.VerifyToken(token)
 	if err != nil {
 		c.JSON(404, gin.H{"message": "认证失败"})
 		return
 	}
-	err1 := model.RemoveDigest(id)
+	err1 := model.RemoveDigest(Digestid)
 	if err1 != nil {
 		c.JSON(401, gin.H{"message": "删除失败"})
 		return
@@ -116,7 +129,7 @@ func DeleteDigest(c *gin.Context) {
 // @Failure 401 "删除失败"
 // @Router /homepage/:user_id/shelf/books_id [put]
 func Deletebooks(c *gin.Context) {
-	id := c.Param("book_id")
+	id := c.Param("books_id")
 	err := model.RemoveBook(id)
 	if err != nil {
 		c.JSON(401, gin.H{"message": "删除失败"})
@@ -152,7 +165,7 @@ func DigestId(c *gin.Context) {
 // @Failure 401 "查找失败"
 // @Router /homepage/:user_id/shelf/book_id [get]
 func BookId(c *gin.Context) {
-	id := c.Param("book_id")
+	id := c.Param("books_id")
 	book, err := model.BookPage(id)
 	if err != nil {
 		c.JSON(401, gin.H{"message": "查找失败"})

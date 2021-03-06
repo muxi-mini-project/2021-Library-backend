@@ -51,7 +51,7 @@ func Login(c *gin.Context) {
 	}
 	fmt.Println(user.UserName, user.UserPassword)
 	// 验证用户名是否存在
-	if model.IfExistUser(user.UserName) == false {
+	if model.IfExistUser(user.UserName) != false {
 		c.JSON(404, gin.H{"message": "用户不存在"})
 		return
 	}
