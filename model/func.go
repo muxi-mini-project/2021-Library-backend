@@ -176,7 +176,7 @@ type temp struct {
 func GetMyBooksId(UserId string) []string {
 	var Id []string
 	var BookId []temp
-	fmt.Println(UserId)
+	//fmt.Println(UserId)
 	if err := DB.Table("users_books").Where("user_id=?", UserId).Find(&BookId).Error; err != nil {
 		log.Println(err)
 		return nil
@@ -184,7 +184,7 @@ func GetMyBooksId(UserId string) []string {
 		fmt.Println(BookId)
 		for _, id := range BookId {
 			Id = append(Id, string(id.BookId))
-			fmt.Println(id.BookId)
+			//fmt.Println(id.BookId)
 		}
 		return Id
 	}
@@ -293,6 +293,36 @@ func AddBookToShelf(BookId string, UserId string) error {
 	new.UserId = UserId
 	new.BookId = BookId
 	if err := DB.Table("users_books").Create(&new).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+//获取该书摘下的所有评论
+func GetAllReview(DigestId string) ([]ReviewInfo, error) {
+	var Reviews []ReviewInfo
+	if err := DB.Table("reviews").Where("summary_id=?", DigestId).Find(&Reviews).Error; err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return Reviews, err
+}
+
+//获取评论界面用户的头像和昵称
+func GetSomeThing(UserId string) (Userinfo, error) {
+	var User Userinfo
+	if err := DB.Table("users").Where("user_id=?", UserId).Find(&User).Error; err != nil {
+		log.Println(err)
+		return Userinfo{}, err
+	}
+	return User, nil
+}
+
+//创建一条评论
+func CreatNewReview(UserId string, DigestId string, content string) error {
+	temp := ReviewInfo{User_id: UserId, Summary_id: DigestId, Content: content}
+	if err := DB.Table("reviews").Create(&temp).Error; err != nil {
+		log.Println(err)
 		return err
 	}
 	return nil

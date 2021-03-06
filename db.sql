@@ -61,7 +61,7 @@ CREATE TABLE book_classes (
 
 CREATE TABLE summary_classes (
 	class_id BIGINT NOT NULL AUTO_INCREMENT,
-	user_id BIGINT NOT NULL,
+	user_id BIGINT NOT NULL, 
 	class_name VARCHAR(100) NOT NULL,
 	PRIMARY KEY (class_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

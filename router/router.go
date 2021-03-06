@@ -83,10 +83,13 @@ func Router(r *gin.Engine) {
 	//安卓提供	Group1.GET("/:user_id/info", handler.info)
 	Group2 := r.Group("/Library")
 	{
-		Group2.POST("/searcher", handler.Searcher)         //搜索界面
-		Group2.GET("/:books_id", handler.BookId2)          //获取书籍的信息
-		Group2.GET("/:books_id/digest", handler.Digest)    //显示该书的书摘信息
-		Group2.POST("/addbook/:books_id", handler.AddBook) //将这本书添加到我的书架里
+		Group2.POST("/searcher", handler.Searcher)                             //搜索界面
+		Group2.GET("/:books_id", handler.BookId2)                              //获取书籍的信息
+		Group2.GET("/:books_id/digest", handler.Digest)                        //显示该书的书摘信息
+		Group2.GET("/:books_id/digest/:digest_id", handler.GetReview)          //显示该书摘下的评论
+		Group2.POST("/addbook/:books_id", handler.AddBook)                     //将这本书添加到我的书架里
+		Group2.GET("/:books_id/digest/:digest_id/review", handler.Review)      //进入写评论的页面
+		Group2.PUT("/:books_id/digest/:digest_id/review", handler.CreatReview) //一个创建评论的功能
 	}
 	//删除这个路由	Group1.GET("/", handler.Homepage)
 
