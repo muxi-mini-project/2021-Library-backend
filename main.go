@@ -21,8 +21,8 @@ import (
 func main() {
 	r := gin.Default()
 
-	DB := model.Initdb()
-	defer DB.Close()
+	model.DB = model.Initdb()
+	defer model.DB.Close()
 
 	router.Router(r)
 	if err := r.Run(); err != nil {
