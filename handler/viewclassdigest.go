@@ -1,4 +1,4 @@
-package handler
+﻿package handler
 
 import (
 	"2021-Library-backend/model"
@@ -14,6 +14,14 @@ import (
 // @Success 200 "获取成功"
 // @Router /digest/mysummary/:user_id/classes [get]
 func ViewClassDigest(c *gin.Context) {
+
+	token := c.Request.Header.Get("token")
+	_, err := model.VerifyToken(token)
+	if err != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
+
 	var summaries []model.Summary
 	var summaryRows []model.SummaryRow
 	var summaryRow model.SummaryRow

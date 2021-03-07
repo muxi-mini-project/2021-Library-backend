@@ -1,4 +1,4 @@
-package handler
+﻿package handler
 
 import (
 	"2021-Library-backend/model"
@@ -16,6 +16,14 @@ import (
 // @Failure 400 "编辑错误"
 // @Router /digest/person/:summary_id [put]
 func EditDigest(c *gin.Context) {
+
+	token := c.Request.Header.Get("token")
+	_, err0 := model.VerifyToken(token)
+	if err0 != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
+
 	var summary model.Summary
 	var summaryInfo model.SummaryInfo
 	var book model.Book

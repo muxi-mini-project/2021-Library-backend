@@ -1,4 +1,4 @@
-package handler
+﻿package handler
 
 import (
 	"2021-Library-backend/model"
@@ -15,6 +15,14 @@ import (
 // @Failure 401 "修改失败"
 // @Router /digest/mysummary/:user_id [put]
 func IfPublic(c *gin.Context) {
+
+	token := c.Request.Header.Get("token")
+	_, err := model.VerifyToken(token)
+	if err != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
+
 	var summary model.Summary
 	summary_id := c.Query("summary_id")
 

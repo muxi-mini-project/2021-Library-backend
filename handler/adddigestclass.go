@@ -1,4 +1,4 @@
-package handler
+﻿package handler
 
 import (
 	"strconv"
@@ -18,6 +18,14 @@ import (
 // @Router /digest/mysummary/:user_id/classes_add [post]
 
 func AddDigestClass(c *gin.Context) {
+
+	token := c.Request.Header.Get("token")
+	_, err0 := model.VerifyToken(token)
+	if err0 != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
+
 	var summaryClass model.SummaryClass
 	var summaryClassName model.SummaryClassName
 

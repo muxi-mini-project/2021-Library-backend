@@ -17,6 +17,14 @@ import (
 // @Failure 400 "搜索错误"
 // @Router /digest/mysummary/:user_id [post]
 func SearchDigest(c *gin.Context) {
+
+	token := c.Request.Header.Get("token")
+	_, err0 := model.VerifyToken(token)
+	if err0 != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
+
 	var summaries, summariesSelect []model.Summary
 	var summaryRow model.SummaryRow
 	var summaryRows []model.SummaryRow
