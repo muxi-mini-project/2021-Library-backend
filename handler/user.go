@@ -26,6 +26,11 @@ func User(c *gin.Context) {
 			"message": "输入有误，格式错误"})
 		return
 	}
+	if _, a := model.IfExistUserName(user.UserName); a != 1 {
+		c.JSON(200, gin.H{
+			"message": "该用户名已经存在请更换其他用户名"})
+		return
+	}
 	user_id := model.Register(user.UserName, user.UserPassword)
 	fmt.Println(user.UserName)
 	c.JSON(200, gin.H{

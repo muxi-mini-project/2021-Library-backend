@@ -327,3 +327,13 @@ func CreatNewReview(UserId string, DigestId string, content string) error {
 	}
 	return nil
 }
+
+//一个防止用户名重复创建的函数
+func IfExistUserName(UserName string) (error, int) {
+	var temp Userinfo
+	if err := DB.Table("users").Where("user_name=?", UserName).Find(&temp).Error; err != nil {
+		log.Println(err)
+		return err, 1
+	}
+	return nil, 0
+}
