@@ -240,9 +240,9 @@ func RemoveDigest(DigestId string) error {
 }
 
 //删除书架上的书
-func RemoveBook(BookId string) error {
+func RemoveBook(UserId string, BookId string) error {
 	var UserBook UserAndBook
-	if err := DB.Table("users_books").Where("book_id=?", BookId).Delete(&UserBook).Error; err != nil {
+	if err := DB.Table("users_books").Where("book_id=? and user_id=?", BookId, UserId).Delete(&UserBook).Error; err != nil {
 		return err
 	}
 	return nil

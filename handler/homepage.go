@@ -16,7 +16,7 @@ import (
 // @Param token header string true "token"
 // @Success 200 {object} model.Userinfo"{"msg":"success"}
 // @Failure 404 "找不到该用户的信息"
-// @Router /homepage/:user_id [get]
+// @Router /homepage/ [get]
 func HomePage(c *gin.Context) {
 	token := c.Request.Header.Get("token")
 	id, err := model.VerifyToken(token)
@@ -46,7 +46,7 @@ func HomePage(c *gin.Context) {
 // @Param toekn header string true "token"
 // @Success 200 {object} model.BooksInfo"{"msg":"success"}"
 // @Failure 404 "获取失败"
-// @Router /homepage/:user_id/shelf [get]
+// @Router /homepage/shelf [get]
 func Shelf(c *gin.Context) {
 	//id := c.Param("user_id")
 	token := c.Request.Header.Get("token")
@@ -57,7 +57,7 @@ func Shelf(c *gin.Context) {
 	}
 	fmt.Println(id)
 	Mybooks := model.GetMyBooksId(id)
-	fmt.Println(Mybooks)
+	//fmt.Println(Mybooks)
 	BooksThings, err1 := model.GetMyBooksinfo(Mybooks)
 	if err1 != nil {
 		c.JSON(404, gin.H{"message": "获取失败"})
@@ -73,7 +73,7 @@ func Shelf(c *gin.Context) {
 // @Param toekn header string true "token"
 // @Success 200 {object} model.DigestInfo "{"msg":"success"}"
 // @Failure 404 "获取失败"
-// @Router /homepage/:user_id/mydigest [get]
+// @Router /homepage/mydigest [get]
 func MyDigest(c *gin.Context) {
 	//id := c.Param("user_id")
 	token := c.Request.Header.Get("token")
@@ -98,10 +98,11 @@ func MyDigest(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param toekn header string true "token"
+// @Param digest_id path string true "digest_id"
 // @Success 200 "删除成功"
 // @Failure 404 "认证失败"
 // @Failure 401 "删除失败"
-// @Router /homepage/:user_id/mydigest/digest_id [put]
+// @Router /homepage/mydigest/{digest_id} [put]
 func DeleteDigest(c *gin.Context) {
 	Digestid := c.Param("digest_id")
 	//fmt.Println(Digestid)
@@ -125,13 +126,20 @@ func DeleteDigest(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param toekn header string true "token"
+// @Param books_id path string true "books_id"
 // @Success 200 "删除成功"
 // @Failure 401 "删除失败"
-// @Router /homepage/:user_id/shelf/books_id [put]
+// @Router /homepage/shelf/{books_id} [put]
 func Deletebooks(c *gin.Context) {
-	id := c.Param("books_id")
-	err := model.RemoveBook(id)
+	token := c.Request.Header.Get("token")
+	UserId, err := model.VerifyToken(token)
 	if err != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
+	id := c.Param("books_id")
+	err1 := model.RemoveBook(UserId, id)
+	if err1 != nil {
 		c.JSON(401, gin.H{"message": "删除失败"})
 		return
 	}
@@ -143,10 +151,18 @@ func Deletebooks(c *gin.Context) {
 // @Tags my
 // @Accept json
 // @Produce json
+// @Param token header string true "token"
+// @Param digest_id path string true "digest_id"
 // @Success 200 {object} model.DigestInfo
 // @Failure 401 "获取失败"
-// @Router /homepage/:user_id/mydigest/digest_id [get]
+// @Router /homepage/mydigest/{digest_id} [get]
 func DigestId(c *gin.Context) {
+	token := c.Request.Header.Get("token")
+	_, err1 := model.VerifyToken(token)
+	if err1 != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
 	id := c.Param("digest_id")
 	digest, err := model.DigestPage(id)
 	if err != nil {
@@ -161,10 +177,17 @@ func DigestId(c *gin.Context) {
 // @Tags my
 // @Accept json
 // @Producer json
+// @Param book_id path string true "book_id"
 // @Success 200 {object} model.BooksInfo
 // @Failure 401 "查找失败"
-// @Router /homepage/:user_id/shelf/book_id [get]
+// @Router /homepage/shelf/{book_id} [get]
 func BookId(c *gin.Context) {
+	token := c.Request.Header.Get("token")
+	_, err1 := model.VerifyToken(token)
+	if err1 != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
 	id := c.Param("books_id")
 	book, err := model.BookPage(id)
 	if err != nil {

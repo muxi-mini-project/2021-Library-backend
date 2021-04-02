@@ -7,6 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "查看我的发布的评论"
+// @Description "获取信息"
+// @Tags library
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Param digest_id path string true "digest_id"
+// @Param books_id path string true "books_id"
+// @Success 200 {object} model.ReviewInfo
+// @Failure 404 "获取失败"
+// @Router /Library/{books_id}/digest/{digest_id} [get]
 func GetReview(c *gin.Context) {
 	id := c.Param("digest_id")
 	token := c.Request.Header.Get("token")
@@ -23,6 +34,17 @@ func GetReview(c *gin.Context) {
 	c.JSON(200, Review)
 }
 
+// @Summary "查看评论"
+// @Description "获取信息"
+// @Tags library
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Param digest_id path string true "digest_id"
+// @Param books_id path string true "books_id"
+// @Success 200 {object} model.Userinfo
+// @Failure 404 "获取失败"
+// @Router /Library/{books_id}/digest/{digest_id}/review [get]
 func Review(c *gin.Context) {
 	token := c.Request.Header.Get("token")
 	id, err := model.VerifyToken(token)
@@ -40,6 +62,19 @@ func Review(c *gin.Context) {
 	c.JSON(200, UserInfo)
 }
 
+// @Summary "创建评论"
+// @Description "创建一个新的评论"
+// @Tags library
+// @Accept json
+// @Produce json
+// @Param reviewInfo body model.ReviewInfo true "reviewInfo"
+// @Param token header string true "token"
+// @Param digest_id path string true "digest_id"
+// @Param books_id path string true "books_id"
+// @Success 200
+// @Failure 404 "身份验证失败"
+// @Failure 401 "创建失败"
+// @Router /Library/{books_id}/digest/{digest_id}/review [put]
 func CreatReview(c *gin.Context) {
 	var reviewInfo model.ReviewInfo
 	token := c.Request.Header.Get("token")

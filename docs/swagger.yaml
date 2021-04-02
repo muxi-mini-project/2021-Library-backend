@@ -1,7 +1,35 @@
 definitions:
+  model.Book:
+    properties:
+      book_auther:
+        type: string
+      book_id:
+        type: integer
+      book_information:
+        type: string
+      book_name:
+        type: string
+      book_picture:
+        type: string
+      class_id:
+        type: integer
+      click_sum:
+        type: integer
+    type: object
+  model.BookClass:
+    properties:
+      book_sum:
+        type: integer
+      class_id:
+        type: integer
+      class_name:
+        type: string
+      class_picture:
+        type: string
+    type: object
   model.BooksInfo:
     properties:
-      book_author:
+      book_auther:
         type: string
       book_id:
         type: string
@@ -38,6 +66,78 @@ definitions:
       user_id:
         type: string
     type: object
+  model.ReviewInfo:
+    properties:
+      content:
+        type: string
+      review_id:
+        type: integer
+      summary_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  model.Search:
+    properties:
+      book_name:
+        type: string
+    type: object
+  model.Summary:
+    properties:
+      book_id:
+        type: integer
+      chapter:
+        type: string
+      class_id:
+        type: integer
+      date:
+        type: string
+      id:
+        type: integer
+      public:
+        type: boolean
+      summary_information:
+        type: string
+      thought:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  model.SummaryClass:
+    properties:
+      class_id:
+        type: integer
+      class_name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  model.SummaryInfo:
+    properties:
+      chapter:
+        type: string
+      public:
+        type: boolean
+      summary_information:
+        type: string
+      thought:
+        type: string
+      title:
+        type: string
+    type: object
+  model.SummaryRow:
+    properties:
+      date:
+        type: string
+      id:
+        type: integer
+      public:
+        type: boolean
+      title:
+        type: string
+    type: object
   model.Token:
     properties:
       token:
@@ -56,17 +156,30 @@ definitions:
       user_picture:
         type: string
     type: object
+  model.Users:
+    properties:
+      user_name:
+        type: string
+      user_password:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is a project made by CCNU 书斋
   title: 2021-miniproject-Library
   version: "1.0"
 paths:
-  /Library/:books_id:
+  /Library/{books_id}:
     get:
       consumes:
       - application/json
       description: '"从书城进入书籍"'
+      parameters:
+      - description: books_id
+        in: path
+        name: books_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -79,11 +192,17 @@ paths:
       summary: '"书籍信息"'
       tags:
       - library
-  /Library/:books_id/digest:
+  /Library/{books_id}/digest:
     get:
       consumes:
       - application/json
       description: '"从书城进入书本获取的关于这个书的书摘信息"'
+      parameters:
+      - description: books_id
+        in: path
+        name: books_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -96,7 +215,111 @@ paths:
       summary: '"书本的书摘信息"'
       tags:
       - library
-  /Library/addbook/:books_id:
+  /Library/{books_id}/digest/{digest_id}:
+    get:
+      consumes:
+      - application/json
+      description: '"获取信息"'
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: digest_id
+        in: path
+        name: digest_id
+        required: true
+        type: string
+      - description: books_id
+        in: path
+        name: books_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ReviewInfo'
+        "404":
+          description: 获取失败
+      summary: '"查看我的发布的评论"'
+      tags:
+      - library
+  /Library/{books_id}/digest/{digest_id}/review:
+    get:
+      consumes:
+      - application/json
+      description: '"获取信息"'
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: digest_id
+        in: path
+        name: digest_id
+        required: true
+        type: string
+      - description: books_id
+        in: path
+        name: books_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Userinfo'
+        "404":
+          description: 获取失败
+      summary: '"查看评论"'
+      tags:
+      - library
+    put:
+      consumes:
+      - application/json
+      description: '"创建一个新的评论"'
+      parameters:
+      - description: reviewInfo
+        in: body
+        name: reviewInfo
+        required: true
+        schema:
+          $ref: '#/definitions/model.ReviewInfo'
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: digest_id
+        in: path
+        name: digest_id
+        required: true
+        type: string
+      - description: books_id
+        in: path
+        name: books_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+        "401":
+          description: 创建失败
+        "404":
+          description: 身份验证失败
+      summary: '"创建评论"'
+      tags:
+      - library
+  /Library/addbook/{books_id}:
     post:
       consumes:
       - application/json
@@ -105,6 +328,11 @@ paths:
       - description: token
         in: header
         name: toekn
+        required: true
+        type: string
+      - description: books_id
+        in: path
+        name: books_id
         required: true
         type: string
       produces:
@@ -124,6 +352,13 @@ paths:
       consumes:
       - application/json
       description: '"在书城中搜索书本"'
+      parameters:
+      - description: temp
+        in: body
+        name: temp
+        required: true
+        schema:
+          $ref: '#/definitions/model.Search'
       produces:
       - application/json
       responses:
@@ -143,26 +378,52 @@ paths:
       consumes:
       - application/json
       description: 将创建的新书摘加入数据库中
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: summaryInfo
+        in: body
+        name: summaryInfo
+        required: true
+        schema:
+          $ref: '#/definitions/model.SummaryInfo'
       produces:
       - application/json
       responses:
         "200":
           description: 创建成功
+          schema:
+            items:
+              $ref: '#/definitions/model.Summary'
+            type: array
         "400":
           description: 编辑错误
       summary: 添加书摘
       tags:
       - digest
-  /digest/mysummary/:user_id:
+  /digest/mysummary/{user_id}:
     get:
       consumes:
       - application/json
       description: '"具体信息"'
+      parameters:
+      - description: user_id
+        in: path
+        name: user_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: 获取成功
+          schema:
+            items:
+              $ref: '#/definitions/model.SummaryRow'
+            type: array
       summary: '"书摘主界面"'
       tags:
       - digest
@@ -170,11 +431,32 @@ paths:
       consumes:
       - application/json
       description: '"搜索书摘的信息"'
+      parameters:
+      - description: search
+        in: body
+        name: search
+        required: true
+        schema:
+          $ref: '#/definitions/model.Search'
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: user_id
+        in: path
+        name: user_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: 获取成功
+          schema:
+            items:
+              $ref: '#/definitions/model.SummaryRow'
+            type: array
         "400":
           description: 搜索错误
       summary: '"搜索"'
@@ -184,21 +466,47 @@ paths:
       consumes:
       - application/json
       description: '"通过按钮来确定是否公开这个书摘"'
+      parameters:
+      - description: user_id
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: 修改成功
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Summary'
+            type: array
         "401":
           description: 修改失败
       summary: '"是否公开"'
       tags:
       - digest
-  /digest/mysummary/:user_id/clasees_edit:
+  /digest/mysummary/{user_id}/clasees_edit:
     delete:
       consumes:
       - application/json
       description: '"删除我的书摘分类里的类别"'
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: user_id
+        in: path
+        name: user_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -207,41 +515,119 @@ paths:
       summary: 删除书摘的分类
       tags:
       - digest
-  /digest/mysummary/:user_id/classes:
+  /digest/mysummary/{user_id}/classes:
     get:
       consumes:
       - application/json
       description: '"书摘的各种类别"'
+      parameters:
+      - description: user_id
+        in: path
+        name: user_id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: 获取成功
+          schema:
+            items:
+              $ref: '#/definitions/model.SummaryClass'
+            type: array
       summary: '"书摘分类"'
       tags:
       - digest
-  /digest/mysummary/:user_id/classes_edit:
+  /digest/mysummary/{user_id}/classes_edit:
     get:
       consumes:
       - application/json
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: user_id
+        in: path
+        name: user_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "200":
           description: 获取成功
+          schema:
+            items:
+              $ref: '#/definitions/model.SummaryClass'
+            type: array
       summary: '"获取我的书摘分类"'
       tags:
       - digest
-  /digest/person/:summary_id:
+  /digest/person/{summary_id}:
+    get:
+      consumes:
+      - application/json
+      description: '"通过点击量对书本的热度进行排序"'
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: summary_id
+        in: path
+        name: summary_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            items:
+              $ref: '#/definitions/model.Summary'
+            type: array
+      summary: '"书城排行榜"'
+      tags:
+      - library
     put:
       consumes:
       - application/json
       description: '"通过编辑修改我发布的书摘"'
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: summary_id
+        in: path
+        name: summary_id
+        required: true
+        type: string
+      - description: summaryInfo
+        in: body
+        name: summaryInfo
+        required: true
+        schema:
+          $ref: '#/definitions/model.SummaryInfo'
       produces:
       - application/json
       responses:
         "200":
           description: 编辑成功
+          schema:
+            items:
+              $ref: '#/definitions/model.Summary'
+            type: array
         "400":
           description: 编辑错误
         "404":
@@ -249,7 +635,7 @@ paths:
       summary: '"编辑书摘"'
       tags:
       - digest
-  /homepage/:user_id:
+  /homepage/:
     get:
       consumes:
       - application/json
@@ -273,12 +659,18 @@ paths:
       summary: '"我的主页"'
       tags:
       - my
-  /homepage/:user_id/info:
+  /homepage/info:
     put:
       consumes:
       - application/json
       description: '"修改用户的基本信息"'
       parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.Userinfo'
       - description: token
         in: header
         name: toekn
@@ -296,7 +688,7 @@ paths:
       summary: '"修改用户的信息"'
       tags:
       - my
-  /homepage/:user_id/mydigest:
+  /homepage/mydigest:
     get:
       consumes:
       - application/json
@@ -319,11 +711,22 @@ paths:
       summary: '"我的发布"'
       tags:
       - my
-  /homepage/:user_id/mydigest/digest_id:
+  /homepage/mydigest/{digest_id}:
     get:
       consumes:
       - application/json
       description: '"获取我的书=书摘的具体信息"'
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: digest_id
+        in: path
+        name: digest_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -346,6 +749,11 @@ paths:
         name: toekn
         required: true
         type: string
+      - description: digest_id
+        in: path
+        name: digest_id
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -358,7 +766,7 @@ paths:
       summary: '"删除我的发布"'
       tags:
       - my
-  /homepage/:user_id/shelf:
+  /homepage/shelf:
     get:
       consumes:
       - application/json
@@ -381,11 +789,17 @@ paths:
       summary: '"我的书架"'
       tags:
       - my
-  /homepage/:user_id/shelf/book_id:
+  /homepage/shelf/{book_id}:
     get:
       consumes:
       - application/json
       description: '"查看我的书本的具体信息"'
+      parameters:
+      - description: book_id
+        in: path
+        name: book_id
+        required: true
+        type: string
       responses:
         "200":
           description: OK
@@ -396,7 +810,7 @@ paths:
       summary: '"我收藏的书"'
       tags:
       - my
-  /homepage/:user_id/shelf/books_id:
+  /homepage/shelf/{books_id}:
     put:
       consumes:
       - application/json
@@ -405,6 +819,11 @@ paths:
       - description: token
         in: header
         name: toekn
+        required: true
+        type: string
+      - description: books_id
+        in: path
+        name: books_id
         required: true
         type: string
       produces:
@@ -427,10 +846,37 @@ paths:
       responses:
         "200":
           description: 获取成功
+          schema:
+            items:
+              $ref: '#/definitions/model.Book'
+            type: array
       summary: '"书城"'
       tags:
       - library
-  /library/class/:class_id:
+  /library/class/{class_id}:
+    get:
+      consumes:
+      - application/json
+      description: '"书本的各种类别"'
+      parameters:
+      - description: class_id
+        in: path
+        name: class_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取成功
+          schema:
+            items:
+              $ref: '#/definitions/model.Book'
+            type: array
+      summary: '"书籍分类"'
+      tags:
+      - library
+  /library/classes:
     get:
       consumes:
       - application/json
@@ -440,20 +886,11 @@ paths:
       responses:
         "200":
           description: 获取成功
+          schema:
+            items:
+              $ref: '#/definitions/model.BookClass'
+            type: array
       summary: '"分类的书籍"'
-      tags:
-      - library
-  /library/classes:
-    get:
-      consumes:
-      - application/json
-      description: '"书本的各种类别"'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 获取成功
-      summary: '"书籍分类"'
       tags:
       - library
   /library/ranking:
@@ -466,6 +903,10 @@ paths:
       responses:
         "200":
           description: 获取成功
+          schema:
+            items:
+              $ref: '#/definitions/model.Book'
+            type: array
       summary: '"书城排行榜"'
       tags:
       - library
@@ -474,6 +915,13 @@ paths:
       consumes:
       - application/json
       description: '"验证用户信息实现登入"'
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.Userinfo'
       responses:
         "200":
           description: 登入成功
@@ -493,6 +941,13 @@ paths:
       consumes:
       - application/json
       description: '"注册一个新用户"'
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.Users'
       produces:
       - application/json
       responses:

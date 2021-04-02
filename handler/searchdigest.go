@@ -13,9 +13,12 @@ import (
 // @Tags digest
 // @Accept json
 // @Produce json
-// @Success 200 "获取成功"
+// @Param search body model.Search true "search"
+// @Param token header string true "token"
+// @Param user_id path string true "user_id"
+// @Success 200 {object} []model.SummaryRow "获取成功"
 // @Failure 400 "搜索错误"
-// @Router /digest/mysummary/:user_id [post]
+// @Router /digest/mysummary/{user_id} [post]
 func SearchDigest(c *gin.Context) {
 
 	token := c.Request.Header.Get("token")

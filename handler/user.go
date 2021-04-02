@@ -12,15 +12,13 @@ import (
 // @tags user
 // @Accept json
 // @Produce json
+// @Param user body model.Users true "user"
 // @Success 200 "注册成功"
 // @Failure 400 "输入有误，格式错误"
 // @Router /user [post]
 func User(c *gin.Context) {
-	type users struct {
-		UserName     string `json:"user_name"`
-		UserPassword string `json:"user_password"`
-	}
-	var user users
+
+	var user model.Users
 	if err := c.BindJSON(&user); err != nil {
 		c.JSON(400, gin.H{
 			"message": "输入有误，格式错误"})
@@ -43,6 +41,7 @@ func User(c *gin.Context) {
 // @Tags login
 // @Accept json
 // @Producer json
+// @Param user body model.Userinfo true "user"
 // @Success 200 {object} model.Token "登入成功"
 // @Failure 400 "输入格式错误"
 // @Failure 404 "用户不存在"

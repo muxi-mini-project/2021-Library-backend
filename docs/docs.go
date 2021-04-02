@@ -24,59 +24,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/Library/:books_id": {
-            "get": {
-                "description": "\"从书城进入书籍\"",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "library"
-                ],
-                "summary": "\"书籍信息\"",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.BooksInfo"
-                        }
-                    },
-                    "401": {
-                        "description": "查找失败"
-                    }
-                }
-            }
-        },
-        "/Library/:books_id/digest": {
-            "get": {
-                "description": "\"从书城进入书本获取的关于这个书的书摘信息\"",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "library"
-                ],
-                "summary": "\"书本的书摘信息\"",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.DigestInfo"
-                        }
-                    },
-                    "404": {
-                        "description": "获取失败"
-                    }
-                }
-            }
-        },
-        "/Library/addbook/:books_id": {
+        "/Library/addbook/{books_id}": {
             "post": {
                 "description": "\"通过书本上面的添加按钮来实现添加\"",
                 "consumes": [
@@ -95,6 +43,13 @@ var doc = `{
                         "description": "token",
                         "name": "toekn",
                         "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "books_id",
+                        "name": "books_id",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -124,6 +79,17 @@ var doc = `{
                     "library"
                 ],
                 "summary": "\"搜索书本\"",
+                "parameters": [
+                    {
+                        "description": "temp",
+                        "name": "temp",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Search"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "搜索成功",
@@ -136,6 +102,230 @@ var doc = `{
                     },
                     "404": {
                         "description": "搜索不到"
+                    }
+                }
+            }
+        },
+        "/Library/{books_id}": {
+            "get": {
+                "description": "\"从书城进入书籍\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "library"
+                ],
+                "summary": "\"书籍信息\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "books_id",
+                        "name": "books_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.BooksInfo"
+                        }
+                    },
+                    "401": {
+                        "description": "查找失败"
+                    }
+                }
+            }
+        },
+        "/Library/{books_id}/digest": {
+            "get": {
+                "description": "\"从书城进入书本获取的关于这个书的书摘信息\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "library"
+                ],
+                "summary": "\"书本的书摘信息\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "books_id",
+                        "name": "books_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.DigestInfo"
+                        }
+                    },
+                    "404": {
+                        "description": "获取失败"
+                    }
+                }
+            }
+        },
+        "/Library/{books_id}/digest/{digest_id}": {
+            "get": {
+                "description": "\"获取信息\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "library"
+                ],
+                "summary": "\"查看我的发布的评论\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "digest_id",
+                        "name": "digest_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "books_id",
+                        "name": "books_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ReviewInfo"
+                        }
+                    },
+                    "404": {
+                        "description": "获取失败"
+                    }
+                }
+            }
+        },
+        "/Library/{books_id}/digest/{digest_id}/review": {
+            "get": {
+                "description": "\"获取信息\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "library"
+                ],
+                "summary": "\"查看评论\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "digest_id",
+                        "name": "digest_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "books_id",
+                        "name": "books_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Userinfo"
+                        }
+                    },
+                    "404": {
+                        "description": "获取失败"
+                    }
+                }
+            },
+            "put": {
+                "description": "\"创建一个新的评论\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "library"
+                ],
+                "summary": "\"创建评论\"",
+                "parameters": [
+                    {
+                        "description": "reviewInfo",
+                        "name": "reviewInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ReviewInfo"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "digest_id",
+                        "name": "digest_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "books_id",
+                        "name": "books_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "401": {
+                        "description": "创建失败"
+                    },
+                    "404": {
+                        "description": "身份验证失败"
                     }
                 }
             }
@@ -153,9 +343,33 @@ var doc = `{
                     "digest"
                 ],
                 "summary": "添加书摘",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "summaryInfo",
+                        "name": "summaryInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SummaryInfo"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "创建成功"
+                        "description": "创建成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Summary"
+                            }
+                        }
                     },
                     "400": {
                         "description": "编辑错误"
@@ -163,7 +377,7 @@ var doc = `{
                 }
             }
         },
-        "/digest/mysummary/:user_id": {
+        "/digest/mysummary/{user_id}": {
             "get": {
                 "description": "\"具体信息\"",
                 "consumes": [
@@ -176,9 +390,24 @@ var doc = `{
                     "digest"
                 ],
                 "summary": "\"书摘主界面\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "获取成功"
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.SummaryRow"
+                            }
+                        }
                     }
                 }
             },
@@ -194,9 +423,31 @@ var doc = `{
                     "digest"
                 ],
                 "summary": "\"是否公开\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "修改成功"
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Summary"
+                            }
+                        }
                     },
                     "401": {
                         "description": "修改失败"
@@ -215,9 +466,40 @@ var doc = `{
                     "digest"
                 ],
                 "summary": "\"搜索\"",
+                "parameters": [
+                    {
+                        "description": "search",
+                        "name": "search",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Search"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "获取成功"
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.SummaryRow"
+                            }
+                        }
                     },
                     "400": {
                         "description": "搜索错误"
@@ -225,7 +507,7 @@ var doc = `{
                 }
             }
         },
-        "/digest/mysummary/:user_id/clasees_edit": {
+        "/digest/mysummary/{user_id}/clasees_edit": {
             "delete": {
                 "description": "\"删除我的书摘分类里的类别\"",
                 "consumes": [
@@ -238,6 +520,22 @@ var doc = `{
                     "digest"
                 ],
                 "summary": "删除书摘的分类",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "成功删除"
@@ -245,7 +543,7 @@ var doc = `{
                 }
             }
         },
-        "/digest/mysummary/:user_id/classes": {
+        "/digest/mysummary/{user_id}/classes": {
             "get": {
                 "description": "\"书摘的各种类别\"",
                 "consumes": [
@@ -258,14 +556,36 @@ var doc = `{
                     "digest"
                 ],
                 "summary": "\"书摘分类\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "获取成功"
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.SummaryClass"
+                            }
+                        }
                     }
                 }
             }
         },
-        "/digest/mysummary/:user_id/classes_edit": {
+        "/digest/mysummary/{user_id}/classes_edit": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -277,14 +597,76 @@ var doc = `{
                     "digest"
                 ],
                 "summary": "\"获取我的书摘分类\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "获取成功"
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.SummaryClass"
+                            }
+                        }
                     }
                 }
             }
         },
-        "/digest/person/:summary_id": {
+        "/digest/person/{summary_id}": {
+            "get": {
+                "description": "\"通过点击量对书本的热度进行排序\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "library"
+                ],
+                "summary": "\"书城排行榜\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "summary_id",
+                        "name": "summary_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Summary"
+                            }
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "\"通过编辑修改我发布的书摘\"",
                 "consumes": [
@@ -297,9 +679,40 @@ var doc = `{
                     "digest"
                 ],
                 "summary": "\"编辑书摘\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "summary_id",
+                        "name": "summary_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "summaryInfo",
+                        "name": "summaryInfo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SummaryInfo"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "编辑成功"
+                        "description": "编辑成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Summary"
+                            }
+                        }
                     },
                     "400": {
                         "description": "编辑错误"
@@ -310,7 +723,7 @@ var doc = `{
                 }
             }
         },
-        "/homepage/:user_id": {
+        "/homepage/": {
             "get": {
                 "description": "\"通过我的id进入我的主页\"",
                 "consumes": [
@@ -346,7 +759,7 @@ var doc = `{
                 }
             }
         },
-        "/homepage/:user_id/info": {
+        "/homepage/info": {
             "put": {
                 "description": "\"修改用户的基本信息\"",
                 "consumes": [
@@ -360,6 +773,15 @@ var doc = `{
                 ],
                 "summary": "\"修改用户的信息\"",
                 "parameters": [
+                    {
+                        "description": "user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Userinfo"
+                        }
+                    },
                     {
                         "type": "string",
                         "description": "token",
@@ -381,7 +803,7 @@ var doc = `{
                 }
             }
         },
-        "/homepage/:user_id/mydigest": {
+        "/homepage/mydigest": {
             "get": {
                 "description": "\"显示我的发布中的书摘的有关信息\"",
                 "consumes": [
@@ -416,7 +838,7 @@ var doc = `{
                 }
             }
         },
-        "/homepage/:user_id/mydigest/digest_id": {
+        "/homepage/mydigest/{digest_id}": {
             "get": {
                 "description": "\"获取我的书=书摘的具体信息\"",
                 "consumes": [
@@ -429,6 +851,22 @@ var doc = `{
                     "my"
                 ],
                 "summary": "\"查看我的发布中书摘的具体信息\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "digest_id",
+                        "name": "digest_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -460,6 +898,13 @@ var doc = `{
                         "name": "toekn",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "digest_id",
+                        "name": "digest_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -475,7 +920,7 @@ var doc = `{
                 }
             }
         },
-        "/homepage/:user_id/shelf": {
+        "/homepage/shelf": {
             "get": {
                 "description": "\"通过用户的id获得该用户的书架上书本的信息\"",
                 "consumes": [
@@ -510,7 +955,7 @@ var doc = `{
                 }
             }
         },
-        "/homepage/:user_id/shelf/book_id": {
+        "/homepage/shelf/{book_id}": {
             "get": {
                 "description": "\"查看我的书本的具体信息\"",
                 "consumes": [
@@ -520,6 +965,15 @@ var doc = `{
                     "my"
                 ],
                 "summary": "\"我收藏的书\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "book_id",
+                        "name": "book_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -533,7 +987,7 @@ var doc = `{
                 }
             }
         },
-        "/homepage/:user_id/shelf/books_id": {
+        "/homepage/shelf/{books_id}": {
             "put": {
                 "description": "\"删除数据库中这本书与该用户的关系\"",
                 "consumes": [
@@ -552,6 +1006,13 @@ var doc = `{
                         "description": "token",
                         "name": "toekn",
                         "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "books_id",
+                        "name": "books_id",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -580,12 +1041,53 @@ var doc = `{
                 "summary": "\"书城\"",
                 "responses": {
                     "200": {
-                        "description": "获取成功"
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Book"
+                            }
+                        }
                     }
                 }
             }
         },
-        "/library/class/:class_id": {
+        "/library/class/{class_id}": {
+            "get": {
+                "description": "\"书本的各种类别\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "library"
+                ],
+                "summary": "\"书籍分类\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "class_id",
+                        "name": "class_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Book"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/library/classes": {
             "get": {
                 "description": "\"显示该类别下的书籍\"",
                 "consumes": [
@@ -600,27 +1102,13 @@ var doc = `{
                 "summary": "\"分类的书籍\"",
                 "responses": {
                     "200": {
-                        "description": "获取成功"
-                    }
-                }
-            }
-        },
-        "/library/classes": {
-            "get": {
-                "description": "\"书本的各种类别\"",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "library"
-                ],
-                "summary": "\"书籍分类\"",
-                "responses": {
-                    "200": {
-                        "description": "获取成功"
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.BookClass"
+                            }
+                        }
                     }
                 }
             }
@@ -640,7 +1128,13 @@ var doc = `{
                 "summary": "\"书城排行榜\"",
                 "responses": {
                     "200": {
-                        "description": "获取成功"
+                        "description": "获取成功",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Book"
+                            }
+                        }
                     }
                 }
             }
@@ -655,6 +1149,17 @@ var doc = `{
                     "login"
                 ],
                 "summary": "\"登入\"",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Userinfo"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "登入成功",
@@ -687,6 +1192,17 @@ var doc = `{
                     "user"
                 ],
                 "summary": "\"注册\"",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Users"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "注册成功"
@@ -699,10 +1215,53 @@ var doc = `{
         }
     },
     "definitions": {
+        "model.Book": {
+            "type": "object",
+            "properties": {
+                "book_auther": {
+                    "type": "string"
+                },
+                "book_id": {
+                    "type": "integer"
+                },
+                "book_information": {
+                    "type": "string"
+                },
+                "book_name": {
+                    "type": "string"
+                },
+                "book_picture": {
+                    "type": "string"
+                },
+                "class_id": {
+                    "type": "integer"
+                },
+                "click_sum": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.BookClass": {
+            "type": "object",
+            "properties": {
+                "book_sum": {
+                    "type": "integer"
+                },
+                "class_id": {
+                    "type": "integer"
+                },
+                "class_name": {
+                    "type": "string"
+                },
+                "class_picture": {
+                    "type": "string"
+                }
+            }
+        },
         "model.BooksInfo": {
             "type": "object",
             "properties": {
-                "book_author": {
+                "book_auther": {
                     "type": "string"
                 },
                 "book_id": {
@@ -758,6 +1317,117 @@ var doc = `{
                 }
             }
         },
+        "model.ReviewInfo": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "review_id": {
+                    "type": "integer"
+                },
+                "summary_id": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Search": {
+            "type": "object",
+            "properties": {
+                "book_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Summary": {
+            "type": "object",
+            "properties": {
+                "book_id": {
+                    "type": "integer"
+                },
+                "chapter": {
+                    "type": "string"
+                },
+                "class_id": {
+                    "type": "integer"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "public": {
+                    "type": "boolean"
+                },
+                "summary_information": {
+                    "type": "string"
+                },
+                "thought": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.SummaryClass": {
+            "type": "object",
+            "properties": {
+                "class_id": {
+                    "type": "integer"
+                },
+                "class_name": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.SummaryInfo": {
+            "type": "object",
+            "properties": {
+                "chapter": {
+                    "type": "string"
+                },
+                "public": {
+                    "type": "boolean"
+                },
+                "summary_information": {
+                    "type": "string"
+                },
+                "thought": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SummaryRow": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "public": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Token": {
             "type": "object",
             "properties": {
@@ -782,6 +1452,17 @@ var doc = `{
                     "type": "string"
                 },
                 "user_picture": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Users": {
+            "type": "object",
+            "properties": {
+                "user_name": {
+                    "type": "string"
+                },
+                "user_password": {
                     "type": "string"
                 }
             }

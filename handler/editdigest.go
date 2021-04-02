@@ -11,10 +11,13 @@ import (
 // @Tags digest
 // @Accept json
 // @Produce json
-// @Success 200 "编辑成功"
+// @Param token header string true "token"
+// @Param summary_id path string true "summary_id"
+// @Param summaryInfo body model.SummaryInfo true "summaryInfo"
+// @Success 200 {object} []model.Summary "编辑成功"
 // @Failure 404 "编辑失败，数据为空"
 // @Failure 400 "编辑错误"
-// @Router /digest/person/:summary_id [put]
+// @Router /digest/person/{summary_id} [put]
 func EditDigest(c *gin.Context) {
 
 	token := c.Request.Header.Get("token")
