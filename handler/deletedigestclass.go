@@ -11,8 +11,10 @@ import (
 // @Tags digest
 // @Accept json
 // @Produce json
+// @Param token header string true "token"
+// @Param user_id path string true "user_id"
 // @Success 200 "成功删除"
-// @Router /digest/mysummary/:user_id/clasees_edit [delete]
+// @Router /digest/mysummary/{user_id}/clasees_edit [delete]
 func DeleteDigestClass(c *gin.Context) {
 
 	token := c.Request.Header.Get("token")

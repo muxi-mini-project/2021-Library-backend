@@ -240,9 +240,9 @@ func RemoveDigest(DigestId string) error {
 }
 
 //删除书架上的书
-func RemoveBook(BookId string) error {
+func RemoveBook(UserId string, BookId string) error {
 	var UserBook UserAndBook
-	if err := DB.Table("users_books").Where("book_id=?", BookId).Delete(&UserBook).Error; err != nil {
+	if err := DB.Table("users_books").Where("book_id=? and user_id=?", BookId, UserId).Delete(&UserBook).Error; err != nil {
 		return err
 	}
 	return nil
@@ -326,4 +326,14 @@ func CreatNewReview(UserId string, DigestId string, content string) error {
 		return err
 	}
 	return nil
+}
+
+//一个防止用户名重复创建的函数
+func IfExistUserName(UserName string) (error, int) {
+	var temp Userinfo
+	if err := DB.Table("users").Where("user_name=?", UserName).Find(&temp).Error; err != nil {
+		log.Println(err)
+		return err, 1
+	}
+	return nil, 0
 }

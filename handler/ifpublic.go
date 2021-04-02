@@ -11,9 +11,11 @@ import (
 // @Tags digest
 // @Accept json
 // @Produce json
-// @Success 200 "修改成功"
+// @Param user_id path string true "user_id"
+// @Param token header string true "token"
+// @Success 200 {object} []model.Summary
 // @Failure 401 "修改失败"
-// @Router /digest/mysummary/:user_id [put]
+// @Router /digest/mysummary/{user_id} [put]
 func IfPublic(c *gin.Context) {
 
 	token := c.Request.Header.Get("token")

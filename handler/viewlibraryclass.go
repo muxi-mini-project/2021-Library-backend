@@ -11,8 +11,9 @@ import (
 // @Tags library
 // @Accept json
 // @Produce json
-// @Success 200 "获取成功"
-// @Router /library/classes [get]
+// @Param class_id path string true "class_id"
+// @Success 200 {object} []model.Book "获取成功"
+// @Router /library/class/{class_id} [get]
 func ViewLibraryClass(c *gin.Context) {
 	var books []model.Book
 	class_id := c.Param("class_id")

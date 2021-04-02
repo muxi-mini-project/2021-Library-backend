@@ -14,7 +14,9 @@ import (
 // @Tags digest
 // @Accept json
 // @Produce json
-// @Success 200  "创建成功"
+// @Param token header string true "token"
+// @Param summaryInfo body model.SummaryInfo true "summaryInfo"
+// @Success 200 {object} []model.Summary "创建成功"
 // @Failure 400 "编辑错误"
 // @Router /digest [post]
 func AddDigest(c *gin.Context) {

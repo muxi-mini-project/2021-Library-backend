@@ -11,7 +11,7 @@ import (
 // @Tags library
 // @Accept json
 // @Produce json
-// @Success 200 "获取成功"
+// @Success 200 {object} []model.Book "获取成功"
 // @Router /library/ranking [get]
 func ViewLibraryRanking(c *gin.Context) {
 	var books []model.Book

@@ -11,6 +11,7 @@ import (
 // @Tags library
 // @Accept json
 // @Produce json
+// @Param temp body model.Search true "temp"
 // @Success 200 {object} model.BooksInfo "搜索成功"
 // @Failure 401 "请重试"
 // @Failure 404 "搜索不到"
@@ -35,9 +36,10 @@ func Searcher(c *gin.Context) {
 // @Tags library
 // @Accept json
 // @Produce json
+// @Param books_id path string true "books_id"
 // @Success 200 {object} model.BooksInfo
 // @Failure 401 "查找失败"
-// @Router /Library/:books_id [get]
+// @Router /Library/{books_id} [get]
 func BookId2(c *gin.Context) {
 	id := c.Param("books_id")
 	book, err := model.BookPage(id)
@@ -53,9 +55,10 @@ func BookId2(c *gin.Context) {
 // @Tags library
 // @Accept json
 // @Produce json
+// @Param books_id path string true "books_id"
 // @Success 200 {object} model.DigestInfo
 // @Failure 404 "获取失败"
-// @Router /Library/:books_id/digest [get]
+// @Router /Library/{books_id}/digest [get]
 func Digest(c *gin.Context) {
 	id := c.Param("books_id")
 	DigestInfomation, err := model.GetAllDigest(id)
@@ -72,10 +75,11 @@ func Digest(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param toekn header string true "token"
+// @Param books_id path string true "books_id"
 // @Success 200 "添加成功"
 // @Failure 401 "验证失败"
 // @Failure 400 "添加失败"
-// @Router /Library/addbook/:books_id [post]
+// @Router /Library/addbook/{books_id} [post]
 func AddBook(c *gin.Context) {
 	id := c.Param("books_id")
 	token := c.Request.Header.Get("token")

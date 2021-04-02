@@ -6,6 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary "书城排行榜"
+// @Description "通过点击量对书本的热度进行排序"
+// @Tags library
+// @Accept json
+// @Produce json
+// @Param token header string true "token"
+// @Param summary_id path string true "summary_id"
+// @Success 200 {object} []model.Summary "获取成功"
+// @Router /digest/person/{summary_id} [get]
 func ViewPersonalDigest(c *gin.Context) {
 
 	token := c.Request.Header.Get("token")

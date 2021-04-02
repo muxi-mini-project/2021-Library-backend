@@ -58,11 +58,11 @@ type SummaryClassName struct {
 	Name string `json:"name"`
 }
 
+// 李劲哲
 type Search struct {
 	Content string `json:"book_name" gorm:"book_name"`
 }
 
-//李劲哲
 type Userinfo struct {
 	UserId       string `json:"user_id" gorm:"AUTO_INCREMENT"`
 	UserName     string `json:"user_name" gorm:"user_name"`
@@ -114,4 +114,8 @@ type ReviewInfo struct {
 	User_id    string `json:"user_id" gorm:"user_id"`
 	Summary_id string `json:"summary_id" gorm:"summary_id"`
 	Content    string `json:"content" gorm:"column:content"`
+}
+type Users struct {
+	UserName     string `json:"user_name"`
+	UserPassword string `json:"user_password"`
 }

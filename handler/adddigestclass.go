@@ -13,9 +13,11 @@ import (
 // @Tags digest
 // @Accept json
 // @Produce json
-// @Success 200 "添加成功"
+// @Param token header string true "token"
+// @Param SummaryClassName body model.SummaryClassName true "SummaryClassName"
+// @Success 200 {object} []model.SummaryClass "添加成功"
 // @Failure 400 "编辑错误"
-// @Router /digest/mysummary/:user_id/classes_add [post]
+// @Router /digest/mysummary/{user_id}/classes_add [post]
 
 func AddDigestClass(c *gin.Context) {
 
