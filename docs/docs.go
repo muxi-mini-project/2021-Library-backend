@@ -626,6 +626,48 @@ var doc = `{
                 }
             }
         },
+        "/digest/mysummary/{user_id}/delete/{digest_id}": {
+            "delete": {
+                "description": "\"删除我的发布中的书摘\"",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "my"
+                ],
+                "summary": "\"删除我的发布\"",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "toekn",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "digest_id",
+                        "name": "digest_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除成功"
+                    },
+                    "401": {
+                        "description": "删除失败"
+                    },
+                    "404": {
+                        "description": "认证失败"
+                    }
+                }
+            }
+        },
         "/digest/person/{summary_id}": {
             "get": {
                 "description": "\"通过点击量对书本的热度进行排序\"",

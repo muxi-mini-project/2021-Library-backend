@@ -40,8 +40,8 @@ func Router(r *gin.Engine) {
 		//搜索书摘
 		v3.POST("/mysummary/:user_id", handler.SearchDigest)
 
-		//删除书摘 //参数summary_id
-		v3.DELETE("/mysummary/:user_id/delete", handler.DeleteDigest)
+		//删除书摘
+		v3.DELETE("/mysummary/:user_id/delete/:digest_id", handler.DeleteDigestTwo)
 
 		//个人书摘内容
 		v3.GET("/person/:summary_id", handler.ViewPersonalDigest)

@@ -196,3 +196,30 @@ func BookId(c *gin.Context) {
 	}
 	c.JSON(200, book)
 }
+
+// @Summary "删除我的发布"
+// @Description "删除我的发布中的书摘"
+// @Tags my
+// @Accept json
+// @Produce json
+// @Param toekn header string true "token"
+// @Param digest_id path string true "digest_id"
+// @Success 200 "删除成功"
+// @Failure 404 "认证失败"
+// @Failure 401 "删除失败"
+// @Router /digest/mysummary/{user_id}/delete/{digest_id} [delete]
+func DeleteDigestTwo(c *gin.Context) {
+	token := c.Request.Header.Get("token")
+	_, err := model.VerifyToken(token)
+	if err != nil {
+		c.JSON(404, gin.H{"message": "认证失败"})
+		return
+	}
+	id := c.Param("digest_id")
+	err1 := model.RemoveDigest(id)
+	if err1 != nil {
+		c.JSON(401, gin.H{"message": "删除失败"})
+		return
+	}
+	c.JSON(200, gin.H{"message": "删除成功"})
+}

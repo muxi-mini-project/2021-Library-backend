@@ -570,6 +570,34 @@ paths:
       summary: '"获取我的书摘分类"'
       tags:
       - digest
+  /digest/mysummary/{user_id}/delete/{digest_id}:
+    delete:
+      consumes:
+      - application/json
+      description: '"删除我的发布中的书摘"'
+      parameters:
+      - description: token
+        in: header
+        name: toekn
+        required: true
+        type: string
+      - description: digest_id
+        in: path
+        name: digest_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除成功
+        "401":
+          description: 删除失败
+        "404":
+          description: 认证失败
+      summary: '"删除我的发布"'
+      tags:
+      - my
   /digest/person/{summary_id}:
     get:
       consumes:
