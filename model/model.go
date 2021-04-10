@@ -82,12 +82,12 @@ type BooksInfo struct {
 }
 
 type DigestInfo struct {
-	DigestId    string `json:"id" gorm:"id"`
+	DigestId    string `json:"id" gorm:"column:id"`
 	UserId      string `json:"user_id" gorm:"user_id"`
 	BookId      string `json:"book_id" gorm:"book_id"`
 	ClassId     string `json:"class_id" gorm:"class_id"`
 	DigestTitle string `json:"title" gorm:"column:title"`
-	chapter     string `gorm:"column:chapter"`
+	Chapter     string `gorm:"column:chapter"`
 	//摘录的原文
 	DigestContent string `json:"summary_information" gorm:"column:summary_information"`
 	DigestIdea    string `json:"thought" gorm:"column:thought"`
