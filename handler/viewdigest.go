@@ -24,8 +24,8 @@ func ViewDigest(c *gin.Context) {
 	}
 
 	var summaries []model.Summary
-	var summaryRows []model.SummaryRow
-	var summaryRow model.SummaryRow
+	//var summaryRows []model.SummaryRow
+	//var summaryRow model.SummaryRow
 	user_id := c.Param("user_id")
 
 	model.DB.Where("user_id = ?", string(user_id)).Find(&summaries)
@@ -37,6 +37,7 @@ func ViewDigest(c *gin.Context) {
 		return
 	}
 
+	/*
 	for i := 0; i < len(summaries); i++ {
 		summaryRow.Id = summaries[i].Id
 		summaryRow.Title = summaries[i].Title
@@ -45,9 +46,10 @@ func ViewDigest(c *gin.Context) {
 
 		summaryRows = append(summaryRows, summaryRow)
 	}
+	*/
 
 	c.JSON(200, gin.H{
 		"message": "获取成功",
-		"data":    summaryRows,
+		"data":    summaries,
 	})
 }
